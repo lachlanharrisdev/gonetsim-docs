@@ -1,0 +1,8 @@
+name = "gonetsim-docs"
+compatibility_date = "2026-04-06"
+
+main = "./src/worker.ts"
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
