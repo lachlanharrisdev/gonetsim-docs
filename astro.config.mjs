@@ -9,6 +9,7 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			title: 'GoNetSim',
+			favicon: './src/assets/favicon.png',
 			logo: {
 				src: './src/assets/logo_transparent.png',
 			},
@@ -28,7 +29,7 @@ export default defineConfig({
 				},
 			],
 			editLink: {
-				baseUrl: 'https://github.com/lachlanharrisdev/gonetsim-docs/edit/main/src/content/docs',
+				baseUrl: 'https://github.com/lachlanharrisdev/gonetsim-docs/edit/main',
 			},
 			customCss: [
 				'./src/styles/custom.css',
