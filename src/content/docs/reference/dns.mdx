@@ -1,0 +1,29 @@
+---
+title: DNS
+description: Reference sheet for the DNS service
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+## Overview
+
+The DNS service simulates a basic DNS server. It currently supports A/AAAA record types, returning a configurable IP address (defaulting to the loopback address) for any query.
+
+When used in combination with the HTTP & HTTPS services, it can be used as a powerful monitor for any attempted connections to C2 domains & covers most of the simulation needs for basic malware analysis.
+
+
+## Configuration
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `enabled` | bool | `true` | Whether the DNS service is enabled |
+| `listen` | string | `:5353` | The address and port to listen on (e.g. `:5353`) |
+| `network` | string | `udp` | The network protocol to use (e.g. `udp`, `tcp`) |
+| `ipv4` | string | `127.0.0.1` | The IP address to return for A records |
+| `ipv6` | string | `::1` | The IP address to return for AAAA records |
+
+To see instructions on how to configure these options, see the [configuration guide](/guides/configuration).
+
+## Further reading
+
+- See the basic [configuration guide](/guides/configuration) for a walkthrough on configuration

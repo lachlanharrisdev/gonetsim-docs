@@ -1,0 +1,16 @@
+GoNetSim Documentation
+======================
+
+Official documentation repository for GoNetSim (https://github.com/lachlanharrisdev/gonetsim). This is the source of truth for official documentation, and the repository for the documentation website.
+
+Links
+-----
+
+* Documentation site: https://www.gonetsim.lachlanharris.dev/
+* GoNetSim repository: https://github.com/lachlanharrisdev/gonetsim
+* License: See LICENSE
+
+==========
+This repository is licensed under the Apache 2.0 License.
+
+Copyright (c) 2026 Lachlan Harris. All Rights Reserved.

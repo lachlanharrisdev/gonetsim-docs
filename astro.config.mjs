@@ -1,25 +1,49 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import starlightThemeBlack from 'starlight-theme-black'
 
 // https://astro.build/config
 export default defineConfig({
+	site: 'https://www.gonetsim.lachlanharris.dev',
 	integrations: [
 		starlight({
-			title: 'My Docs',
-			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
+			title: 'GoNetSim',
+			logo: {
+				src: './src/assets/logo_transparent.png',
+			},
+			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/lachlanharrisdev/gonetsim' }],
 			sidebar: [
 				{
 					label: 'Guides',
 					items: [
 						// Each item here is one entry in the navigation menu.
-						{ label: 'Example Guide', slug: 'guides/example' },
+						{ label: 'Installation', slug: 'guides/installation' },
+						{ label: 'Configuration', slug: 'guides/configuration' },
 					],
 				},
 				{
 					label: 'Reference',
 					autogenerate: { directory: 'reference' },
 				},
+			],
+			editLink: {
+				baseUrl: 'https://github.com/lachlanharrisdev/gonetsim-docs/edit/main/src/content/docs',
+			},
+			customCss: [
+				'./src/styles/custom.css',
+			],
+
+
+			plugins: [
+				starlightThemeBlack({
+				navLinks: [{ // optional
+					label: 'Docs',
+					link: '/guides/installation/',
+				}],
+				footerText: //optional
+					'Copyright (c) 2026 Lachlan Harris. All Rights Reserved.'
+				})
 			],
 		}),
 	],

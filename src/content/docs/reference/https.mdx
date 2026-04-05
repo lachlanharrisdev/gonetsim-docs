@@ -1,0 +1,40 @@
+---
+title: HTTPS
+description: Reference sheet for the HTTPS service
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import { Steps } from '@astrojs/starlight/components';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+## Overview
+
+The HTTPS service simulates a basic web server. It extends the functionality of the [HTTP service](/reference/http) by adding SSL/TLS support. It has two modes of operation:
+
+<Tabs>
+<TabItem label="Fake">
+In "Fake" mode, requests to any URL will return a generic response with a configurable status code, headers and body. 
+</TabItem>
+<TabItem label="Real">
+In "Real" mode, a directory can be specified and the server will serve static files from that directory. If a requested file is not found, a 404 response will be returned.
+
+<Aside type="caution">"Real" mode is still in development. Please see the [GitHub Issue](https://github.com/lachlanharrisdev/gonetsim/issues/13) for its current status of development</Aside>
+</TabItem>
+</Tabs>
+
+
+## Configuration
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `enabled` | bool | `true` | Whether the HTTP service is enabled |
+| `listen` | string | `:8443` | The address and port to listen on (e.g. `:8443`) |
+| `status` | int | `200` | The status code to return in "Fake" mode |
+| `cert` | string | `""` | The path to the TLS certificate file (PEM format). If empty, a self-signed certificate will be generated |
+| `key` | string | `""` | The path to the TLS key file (PEM format). If empty, a self-signed key will be generated |
+
+To see instructions on how to configure these options, see the [configuration guide](/guides/configuration).
+
+## Further reading
+
+- See the basic [configuration guide](/guides/configuration) for a walkthrough on configuration

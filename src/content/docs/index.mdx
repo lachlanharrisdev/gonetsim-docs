@@ -1,25 +1,49 @@
 ---
-title: Welcome to Starlight
-description: Get started building your docs site with Starlight.
+title: GoNetSim
+description: The official documentation for GoNetSim, the Go network simulator.
 template: splash # Remove or comment out this line to display the site sidebar on this page.
 hero:
-  tagline: Congrats on setting up a new Starlight project!
+  tagline: The official documentation for GoNetSim, the Go network simulator.
   image:
-    file: ../../assets/houston.webp
+    file: ../../assets/logo_transparent.png
   actions:
-    - text: Example Guide
-      link: /guides/example/
+    - text: Installation
+      link: /guides/installation/
       icon: right-arrow
-    - text: Read the Starlight docs
-      link: https://starlight.astro.build
+    - text: See the Repository
+      link: https://github.com/lachlanharrisdev/gonetsim
       icon: external
       variant: minimal
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
+import { ContainerSection } from 'starlight-theme-black/components'
+import { LinkButton } from '@astrojs/starlight/components';
 
-## Next steps
+<ContainerSection>
 
+## Supported services
+
+<CardGrid stagger>
+	<Card title="DNS" icon="dns" link="/reference/dns">
+		Basic DNS server supporting A/AAAA records. Can be used in combination with the HTTP & HTTPS services to simulate C2 domains.
+
+		<LinkButton href="/reference/dns" variant="secondary" icon="right-arrow">Reference</LinkButton>
+	</Card>
+
+	<Card title="HTTP" icon="http" link="/reference/http">
+		Basic HTTP server with two modes: "Fake" mode returns a generic response for any request, while "Real" mode serves static files from a specified directory.
+
+		<LinkButton href="/reference/http" variant="secondary" icon="right-arrow">Reference</LinkButton>
+	</Card>
+	<Card title="HTTPS" icon="https" link="/reference/https">
+		Basic HTTPS server extending the functionality of the HTTP service by adding SSL/TLS support. It has the same two modes of operation as the HTTP service.
+
+		<LinkButton href="/reference/https" variant="secondary" icon="right-arrow">Reference</LinkButton>
+	</Card>
+</CardGrid>
+
+{/*/}
 <CardGrid stagger>
 	<Card title="Update content" icon="pencil">
 		Edit `src/content/docs/index.mdx` to see this page change.
@@ -38,3 +62,6 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 		Learn more in [the Starlight Docs](https://starlight.astro.build/).
 	</Card>
 </CardGrid>
+*/}
+
+</ContainerSection>

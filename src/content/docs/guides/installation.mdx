@@ -1,0 +1,165 @@
+---
+title: Installation
+description: Comprehensive guide on installation & basic setup
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import { Steps } from '@astrojs/starlight/components';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+## Prerequisites
+
+This document will describe the process for locating, installing & verifying GoNetSim. Please ensure you are following the correct instructions for your operating system.
+
+<Tabs>
+<TabItem label="Windows">
+* Windows 10+
+* x86_64 or ARM64 CPU architecture
+</TabItem>
+<TabItem label="macOS">
+* macOS 10.15+ (Catalina or later)
+* x86_64 or ARM64 (Apple Silicon) CPU architecture
+</TabItem>
+<TabItem label="Linux">
+* `curl` & `tar` installed
+* x86_64 or ARM64 CPU architecture
+<Aside>GoNetSim is only tested & officially supported on Ubuntu-based distributions, but should work on any modern Linux distribution.</Aside>
+</TabItem>
+</Tabs>
+
+## Download
+
+The source repository can be found [here](https://github.com/lachlanharrisdev/gonetsim) (github.com/lachlanharrisdev/gonetsim). It is periodically mirrored to 
+[here](https://git.lachlanharrisdev/lachlanharris.dev/gonetsim) (git.lachlanharris.dev/lachlanharris.dev/gonetsim), and a GitLab mirror is soon to be established.
+
+<Aside type="danger">Please only download GoNetSim from official sources. Any repositories not owned by Lachlan Harris or not endorsed by this documentation are not 
+official sources. Use at your own risk.</Aside>
+
+
+<Tabs>
+<TabItem label="Windows">
+<Steps>
+
+1. Go to the [releases page](https://github.com/lachlanharrisdev/gonetsim/releases) and find the [latest release](https://github.com/lachlanharrisdev/gonetsim/releases/latest). 
+
+2. Download the correct release for your platform
+
+    <Tabs>
+    <TabItem label="x86_64">
+    Download `GoNetSim_Windows_x86_64.zip`
+    </TabItem>
+    <TabItem label="ARM64">
+    Download `GoNetSim_Windows_arm64.zip`
+    </TabItem>
+    </Tabs>
+
+    <Aside>You may have to click "Show all assets" at the bottom of the release to see some of the files.</Aside>
+
+3. Extract the downloaded archive 
+
+4. Move the extracted `gonetsim.exe` to a directory in your PATH (e.g. `C:\Windows\System32`)
+
+5. Verify the installation
+
+    ```bash
+    gonetsim --version
+    ```
+
+</Steps>
+</TabItem>
+<TabItem label="macOS">
+<Steps>
+
+1. Go to the [releases page](https://github.com/lachlanharrisdev/gonetsim/releases) and find the [latest release](https://github.com/lachlanharrisdev/gonetsim/releases/latest)
+
+2. Download the correct release for your platform
+
+    <Tabs>
+    <TabItem label="x86_64">
+    Download `GoNetSim_Darwin_x86_64.tar.gz`
+    </TabItem>
+    <TabItem label="ARM64">
+    Download `GoNetSim_Darwin_arm64.tar.gz`
+    </TabItem>
+    </Tabs>
+
+    <Aside>You may have to click "Show all assets" at the bottom of the release to see some of the files.</Aside>
+
+3. Extract the downloaded archive
+
+4. Move the extracted binary to a directory in your PATH
+
+    ```bash
+    sudo mv gonetsim /usr/local/bin/
+    ```
+
+5. Verify the installation
+
+    ```bash
+    gonetsim --version
+    ```
+
+</Steps>
+</TabItem>
+<TabItem label="Linux">
+<Steps>
+
+1. Download the latest release directly from the releases page
+
+    <Tabs>
+    <TabItem label="x86_64">
+    ```bash
+    curl -L -O https://github.com/lachlanharrisdev/gonetsim/releases/latest/download/GoNetSim_Linux_x86_64.tar.gz
+    ```
+    </TabItem>
+    <TabItem label="ARM64 / AARCH64">
+    ```bash
+    curl -L -O https://github.com/lachlanharrisdev/gonetsim/releases/latest/download/GoNetSim_Linux_arm64.tar.gz
+    ```
+    </TabItem>
+    </Tabs>
+
+2. Extract the downloaded archive
+
+    <Tabs>
+    <TabItem label="x86_64">
+    ```bash
+    tar -xzf GoNetSim_Linux_x86_64.tar.gz
+    ```
+    </TabItem>
+    <TabItem label="ARM64 / AARCH64">
+    ```bash
+    tar -xzf GoNetSim_Linux_arm64.tar.gz
+    ```
+    </TabItem>
+    </Tabs>
+
+    A single binary named `gonetsim` should be extracted to the current working directory
+
+3. Move the extracted binary to a directory in your PATH
+
+    ```bash
+    sudo mv gonetsim /usr/local/bin/
+    ```
+
+4. Verify the installation
+    ```bash
+    gonetsim --version
+    ```
+
+</Steps>
+</TabItem>
+</Tabs>
+
+## First Run
+
+After installing GoNetSim, it should work right ouf the box by running:
+
+```bash
+gonetsim
+```
+
+The first run of the command will create a default configuration file at `$XDG_CONFIG_HOME/gonetsim/config.toml` (or `~/.config/gonetsim/config.toml` if `XDG_CONFIG_HOME` is not set). 
+You can edit this file to change the default configuration, or specify a different config file with the `--config` flag. 
+
+For more information on configuration, see the [configuration documentation](/guides/configuration/).
