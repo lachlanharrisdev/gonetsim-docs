@@ -52,9 +52,8 @@ This includes macOS users, as support for standalone macOS binaries are experime
     ```yaml
     services:
         gonetsim:
-            build:
             context: ..
-            dockerfile: ghcr.io/lachlanharrisdev/gonetsim:latest
+            image: ghcr.io/lachlanharrisdev/gonetsim:latest
 
             # publish the default (non-privileged) ports
             # to publish standard ports on the host instead, swap to:
