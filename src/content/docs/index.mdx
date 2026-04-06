@@ -26,18 +26,18 @@ import { LinkButton } from '@astrojs/starlight/components';
 
 <CardGrid stagger>
 	<Card title="DNS" icon="dns" link="/reference/dns">
-		Basic DNS server supporting A/AAAA records. Can be used in combination with the HTTP & HTTPS services to simulate C2 domains.
+		DNS server supporting A/AAAA records. Can be used in combination with the HTTP & HTTPS services to simulate C2 domains.
 
 		<LinkButton href="/reference/dns" variant="secondary" icon="right-arrow">Reference</LinkButton>
 	</Card>
 
 	<Card title="HTTP" icon="http" link="/reference/http">
-		Basic HTTP server with two modes: "Fake" mode returns a generic response for any request, while "Real" mode serves static files from a specified directory.
+		HTTP server with two modes: "Fake" mode returns a realistic response for any request & file extension, while "Real" mode serves static files from a specified directory.
 
 		<LinkButton href="/reference/http" variant="secondary" icon="right-arrow">Reference</LinkButton>
 	</Card>
 	<Card title="HTTPS" icon="https" link="/reference/https">
-		Basic HTTPS server extending the functionality of the HTTP service by adding SSL/TLS support. It has the same two modes of operation as the HTTP service.
+		HTTPS server extending the functionality of the HTTP service by adding SSL/TLS support. Possesses the same two modes of operation as the HTTP service.
 
 		<LinkButton href="/reference/https" variant="secondary" icon="right-arrow">Reference</LinkButton>
 	</Card>

@@ -11,7 +11,8 @@ The HTTP service simulates a basic web server. It has two modes of operation:
 
 <Tabs>
 <TabItem label="Fake">
-In "Fake" mode, requests to any URL will return a generic response with a configurable status code, headers and body. 
+In "Fake" mode, requests to any URL will return a generic response with a configurable status code & headers. Supported file extensions (currently `.html`, `.htm`, `.asp`, `.txt`, `.md`, `.js`, `.css`)
+will return a realistic body of that type, and unsupported file extensions will return the default html page.
 </TabItem>
 <TabItem label="Real">
 In "Real" mode, a directory can be specified and the server will serve static files from that directory. If a requested file is not found, a 404 response will be returned.

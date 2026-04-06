@@ -17,9 +17,7 @@ This document will describe the process for locating, installing & verifying GoN
 * x86_64 or ARM64 CPU architecture
 </TabItem>
 <TabItem label="macOS">
-* x86_64 or ARM64 (Apple Silicon) CPU architecture
-
-<Aside type="danger">The maintainer(s) of GoNetSim do not have access to Apple Silicon hardware, so support for ARM64 macOS is currently experimental. Notarization is also not currently available for ARM64 macOS builds. You may be better of using [dockerised GoNetSim](/guides/docker)</Aside>
+<Aside type="danger">macOS binaries are not built by the maintainer(s) of GoNetSim. To use GoNetSim on macOS, please use [dockerised GoNetSim](/guides/docker)</Aside>
 </TabItem>
 <TabItem label="Linux">
 * `curl` & `tar` installed
@@ -67,39 +65,7 @@ The source repository can be found [here](https://github.com/lachlanharrisdev/go
 </Steps>
 </TabItem>
 <TabItem label="macOS">
-<Aside type="danger">The maintainer(s) of GoNetSim do not have access to Apple Silicon hardware, so support for ARM64 macOS is currently experimental. Notarization is also not currently available for ARM64 macOS builds.</Aside>
-<Steps>
-
-1. Go to the [releases page](https://github.com/lachlanharrisdev/gonetsim/releases) and find the [latest release](https://github.com/lachlanharrisdev/gonetsim/releases/latest)
-
-2. Download the correct release for your platform
-
-    <Tabs>
-    <TabItem label="x86_64">
-    Download `GoNetSim_Darwin_x86_64.tar.gz`
-    </TabItem>
-    <TabItem label="ARM64">
-    Download `GoNetSim_Darwin_arm64.tar.gz`
-    </TabItem>
-    </Tabs>
-
-    <Aside>You may have to click "Show all assets" at the bottom of the release to see some of the files.</Aside>
-
-3. Extract the downloaded archive
-
-4. Move the extracted binary to a directory in your PATH
-
-    ```bash
-    sudo mv gonetsim /usr/local/bin/
-    ```
-
-5. Verify the installation
-
-    ```bash
-    gonetsim --version
-    ```
-
-</Steps>
+<Aside type="danger">macOS binaries are not built by the maintainer(s) of GoNetSim. To use GoNetSim on macOS, please use [dockerised GoNetSim](/guides/docker)</Aside>
 </TabItem>
 <TabItem label="Linux">
 <Steps>

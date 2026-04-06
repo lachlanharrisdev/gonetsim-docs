@@ -40,10 +40,24 @@ export default defineConfig({
 
 			plugins: [
 				starlightThemeBlack({
-				navLinks: [{ // optional
-					label: 'Docs',
-					link: '/guides/installation/',
-				}],
+				navLinks: [
+					{
+						label: 'Docs',
+						link: '/guides/installation/',
+					},
+					{
+						label: 'About',
+						link: '/about/',
+					},
+					{
+						label: 'Downloads',
+						link: 'https://github.com/lachlanharrisdev/gonetsim/releases',
+					},
+					{
+						label: 'Contact',
+						link: '/contact/',
+					}
+				],
 				footerText: //optional
 					'Copyright (c) 2026 Lachlan Harris. All Rights Reserved.'
 				})
