@@ -5,12 +5,11 @@ description: Reference sheet for the DNS service
 
 import { Aside } from '@astrojs/starlight/components';
 
-## Overview
-
 The DNS service simulates a basic DNS server. It currently supports A/AAAA record types, returning a configurable IP address (defaulting to the loopback address) for any query.
 
 When used in combination with the HTTP & HTTPS services, it can be used as a powerful monitor for any attempted connections to C2 domains & covers most of the simulation needs for basic malware analysis.
 
+<Aside>Support for other record types (including TXT, CNAME & MX) is planned for a future release</Aside>
 
 ## Configuration
 

@@ -10,6 +10,7 @@ export default defineConfig({
 		starlight({
 			title: 'GoNetSim',
 			favicon: './src/assets/favicon.png',
+			description: 'An unofficial, spiritual successor to INetSim, a suite of tools for simulating common internet services for malware analysis and testing.',
 			logo: {
 				src: './src/assets/logo_transparent.png',
 			},
@@ -21,6 +22,7 @@ export default defineConfig({
 						// Each item here is one entry in the navigation menu.
 						{ label: 'Installation', slug: 'guides/installation' },
 						{ label: 'Configuration', slug: 'guides/configuration' },
+						{ label: 'Docker', slug: 'guides/docker' },
 					],
 				},
 				{

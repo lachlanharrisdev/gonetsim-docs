@@ -5,4 +5,53 @@ description: Basic overview of configuration & options for GoNetSim
 
 import { Aside } from '@astrojs/starlight/components';
 
-<Aside type="caution">This article is a stub and is currently being developed. You may find what you're looking for in the [README.md on GitHub](https://github.com/lachlanharrisdev/gonetsim)</Aside>
+Configuration in GoNetSim is done through TOML files. There are many options for the location of these files, which will be described in the next section.
+
+Each configuration file determines the configuration for the entire tool, but is only applied to tool runs as described below. This means you can have 
+multiple configurations with different options and switch between for different runs.
+
+## Configuration File Locations
+
+GoNetSim will look for configuration files in the following locations, in order of precedence:
+
+1. The path specified by the `--config` flag when running GoNetSim 
+
+    ```bash
+    gonetsim --config /path/to/config.toml
+    ```
+
+2. The default configuration file at `$XDG_CONFIG_HOME/gonetsim/config.toml` (or `~/.config/gonetsim/config.toml` if `XDG_CONFIG_HOME` is not set)
+
+3. The system-wide configuration file at `/etc/gonetsim/config.toml`
+
+## Modifying Configurations
+
+Configuration files are organised in sections, with each section corresponding to a service. For example, the `[dns]` section corresponds specifically to the DNS service & will not affect configuration for other services.
+
+Under each section, there are one or more options that can be modified to change the behavior of the corresponding service. For example, the `enabled` option determines whether the service is enabled or not.
+
+To change a configuration option, simply edit the content after the equals sign `=` for the desired option
+
+Here, we'll disable the DNS service and change the listen address for the HTTP service:
+
+```diff
+...
+[dns]
+- enabled = true
++ enabled = false
+listen = ":5354"
+network = "udp"
+ipv4 = "127.0.0.1"
+ipv6 = "::1"
+
+[http]
+enabled = false
+- listen = ":8080"
++ listen = ":8081"
+status = 200
+...
+```
+
+The full list of configuration options can be found in the reference documentation for each service, such as the [DNS reference](/reference/dns/) or the  [HTTP reference](/reference/http/).
+
+<Aside>After modifying a configuration file, make sure to save the file and restart GoNetSim for the changes to take effect</Aside>

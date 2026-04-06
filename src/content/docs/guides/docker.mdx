@@ -1,0 +1,147 @@
+---
+title: Docker
+description: Setup & usage instructions for the official GoNetSim Docker image
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import { Steps } from '@astrojs/starlight/components';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+An official GoNetSim Docker image is available on the GitHub Container Registry at [lachlanharrisdev/gonetsim](https://github.com/lachlanharrisdev/gonetsim/pkgs/container/gonetsim).
+The image is built from the `main` branch of the GoNetSim repository, and is automatically updated with each new commit to `main`. It is available for both `amd64` and `arm64` architectures.
+
+### Benefits
+
+Using the Docker image is the preferred method of running GoNetSim if you require long periods of uptime, or none of the pre-built binaries are compatible with your system.
+This includes macOS users, as support for standalone macOS binaries are experimental and do not support notorization.
+
+
+## Setup
+
+
+<Tabs>
+<TabItem label="Docker standalone">
+<Steps>
+
+1. Install Docker on your system if you haven't already. You can find instructions for your platform on the [Docker website](https://docs.docker.com/get-docker/).
+
+2. Pull the latest GoNetSim image from the GitHub Container Registry:
+
+    ```bash
+    docker pull ghcr.io/lachlanharrisdev/gonetsim:latest
+    ```
+
+3. Run the GoNetSim container:
+
+    ```bash
+    docker run --rm \
+        -p 5353:5353/udp -p 5353:5353/tcp \
+        -p 8080:8080 -p 8443:8443 \
+        ghcr.io/lachlanharrisdev/gonetsim:latest
+    ```
+
+</Steps>
+</TabItem>
+<TabItem label="Docker Compose">
+<Steps>
+
+1. Install Docker & Docker Compose on your system if you haven't already. You can find instructions for your platform on the [Docker website](https://docs.docker.com/get-docker/).
+
+2. Copy the following `docker-compose.yml` file to your system:
+
+    ```yaml
+    services:
+        gonetsim:
+            build:
+            context: ..
+            dockerfile: ghcr.io/lachlanharrisdev/gonetsim:latest
+
+            # publish the default (non-privileged) ports
+            # to publish standard ports on the host instead, swap to:
+            #  - "53:5353/udp"
+            #  - "53:5353/tcp"
+            #  - "80:8080"
+            #  - "443:8443"
+            ports:
+            - "5353:5353/udp"
+            - "5353:5353/tcp"
+            - "8080:8080"
+            - "8443:8443"
+
+            # by default the image includes a config at /etc/gonetsim/gonetsim.toml.
+            # to use a custom config, mount a read-only file over it:
+            # volumes:
+            #   - ../gonetsim.toml:/etc/gonetsim/gonetsim.toml:ro
+    ```
+
+3. Start the container with Docker Compose:
+
+    ```bash
+    docker-compose up -d
+    ```
+
+</Steps>
+</TabItem>
+
+<TabItem label="From source">
+
+In some scenarios it may be desirable to build the Docker image from source, such as when testing changes to the image or if you want to use a specific branch or commit of the GoNetSim repository.
+
+<Steps>
+
+1. Clone the GoNetSim repository:
+
+    ```bash
+    git clone https://github.com/lachlanharrisdev/gonetsim.git
+    ```
+
+2. Navigate to the repository directory:
+
+    ```bash
+    cd gonetsim
+    ```
+
+3. Build the Docker image:
+
+    ```bash
+    docker build -f docker/Dockerfile -t gonetsim:local .
+    ```
+
+4. Run the GoNetSim container:
+
+    ```bash
+    docker run --rm \
+        -p 5353:5353/udp -p 5353:5353/tcp \
+        -p 8080:8080 -p 8443:8443 \
+        gonetsim:local
+    ```
+
+</Steps>
+</TabItem>
+</Tabs>
+
+## Usage
+
+The container behaves very similar to the standalone binary, and will read its configuration from `/etc/gonetsim/gonetsim.toml` by default. 
+
+To use a custom configuration, mount a file over this path with the `-v` flag in `docker run`:
+
+```bash
+docker run --rm \
+    -p 5353:5353/udp -p 5353:5353/tcp \
+    -p 8080:8080 -p 8443:8443 \
+    -v /path/to/config.toml:/etc/gonetsim/gonetsim.toml:ro \
+    ghcr.io/lachlanharrisdev/gonetsim:latest
+```
+
+The services will be available at the same ports as the standalone binary, and can be accessed in the same way. To test this, you can use the `dig` command for DNS:
+
+```bash
+dig @localhost -p 5353 example.com
+```
+
+Or `curl` for HTTP:
+
+```bash
+curl -k -v https://localhost:8443
+```

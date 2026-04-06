@@ -7,9 +7,9 @@ import { Aside } from '@astrojs/starlight/components';
 import { Steps } from '@astrojs/starlight/components';
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 
-## Prerequisites
-
 This document will describe the process for locating, installing & verifying GoNetSim. Please ensure you are following the correct instructions for your operating system.
+
+## Prerequisites
 
 <Tabs>
 <TabItem label="Windows">
@@ -17,13 +17,15 @@ This document will describe the process for locating, installing & verifying GoN
 * x86_64 or ARM64 CPU architecture
 </TabItem>
 <TabItem label="macOS">
-* macOS 10.15+ (Catalina or later)
 * x86_64 or ARM64 (Apple Silicon) CPU architecture
+
+<Aside type="danger">The maintainer(s) of GoNetSim do not have access to Apple Silicon hardware, so support for ARM64 macOS is currently experimental. Notarization is also not currently available for ARM64 macOS builds. You may be better of using [dockerised GoNetSim](/guides/docker)</Aside>
 </TabItem>
 <TabItem label="Linux">
 * `curl` & `tar` installed
 * x86_64 or ARM64 CPU architecture
-<Aside>GoNetSim is only tested & officially supported on Ubuntu-based distributions, but should work on any modern Linux distribution.</Aside>
+
+<Aside>GoNetSim is only tested & officially supported on Ubuntu-based distributions, but should work on any modern Linux distribution. You may be better of using [dockerised GoNetSim](/guides/docker)</Aside>
 </TabItem>
 </Tabs>
 
@@ -31,9 +33,6 @@ This document will describe the process for locating, installing & verifying GoN
 
 The source repository can be found [here](https://github.com/lachlanharrisdev/gonetsim) (github.com/lachlanharrisdev/gonetsim). It is periodically mirrored to 
 [here](https://git.lachlanharrisdev/lachlanharris.dev/gonetsim) (git.lachlanharris.dev/lachlanharris.dev/gonetsim), and a GitLab mirror is soon to be established.
-
-<Aside type="danger">Please only download GoNetSim from official sources. Any repositories not owned by Lachlan Harris or not endorsed by this documentation are not 
-official sources. Use at your own risk.</Aside>
 
 
 <Tabs>
@@ -68,6 +67,7 @@ official sources. Use at your own risk.</Aside>
 </Steps>
 </TabItem>
 <TabItem label="macOS">
+<Aside type="danger">The maintainer(s) of GoNetSim do not have access to Apple Silicon hardware, so support for ARM64 macOS is currently experimental. Notarization is also not currently available for ARM64 macOS builds.</Aside>
 <Steps>
 
 1. Go to the [releases page](https://github.com/lachlanharrisdev/gonetsim/releases) and find the [latest release](https://github.com/lachlanharrisdev/gonetsim/releases/latest)
@@ -148,6 +148,10 @@ official sources. Use at your own risk.</Aside>
     ```
 
 </Steps>
+</TabItem>
+
+<TabItem label="Docker">
+Please see the [Docker guide](/guides/docker) for instructions on how to use GoNetSim with Docker.
 </TabItem>
 </Tabs>
 
