@@ -7,7 +7,7 @@ import { Aside } from '@astrojs/starlight/components';
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 
-The DNS service simulates a basic DNS server. It currently supports A/AAAA record types, returning a configurable IP address (defaulting to the loopback address) for any query.
+The DNS service simulates a DNS server, currently supporting A, AAAA, CNAME, TXT, NS, SRV, PTR & MX, and a generic response for any other record types. The returned IPv4, IPv6, domain name (for CNAME, MX & NS) and TXT values can all be separately configured.
 
 When used in combination with the HTTP & HTTPS services, it can be used as a powerful monitor for any attempted connections to C2 domains & covers most of the simulation needs for basic malware analysis.
 
@@ -22,6 +22,10 @@ When used in combination with the HTTP & HTTPS services, it can be used as a pow
 | `network` | string | `udp` | The network protocol to use (e.g. `udp`, `tcp`) |
 | `ipv4` | string | `127.0.0.1` | The IP address to return for A records |
 | `ipv6` | string | `::1` | The IP address to return for AAAA records |
+| `domain` | string | `localhost` | The domain name to return for CNAME, MX & NS records |
+| `txt` | string | `TXT record response from GoNetSim` | The text to return for TXT records |
+| `ttl` | int | `60` | The TTL (time to live) value to return for all records, in seconds |
+| `compress` | bool | `false` | Whether to enable DNS message compression |
 
 To see instructions on how to configure these options, see the [configuration guide](/guides/configuration).
 
