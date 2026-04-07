@@ -1,0 +1,114 @@
+---
+title: Usage
+description: Basic usage guide for beginners
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import { Aside } from '@astrojs/starlight/components';
+import { Steps } from '@astrojs/starlight/components';
+import { Card, CardGrid } from '@astrojs/starlight/components';
+import { LinkButton } from '@astrojs/starlight/components';
+
+This document will guide you through GoNetSim's basic commands.
+
+## Prerequisites
+
+* GoNetSim installed **standalone** on your system. If you haven't done this yet, please see the [installation guide](/guides/installation). This tutorial does not directly walk through dockerised setups.
+
+<Aside>This tutorial assumes you have a basic understanding of the command line and are comfortable navigating your file system.</Aside>
+
+## Baby's First GoNetSim
+
+To start GoNetSim, you can simply run the `gonetsim` command (or `gonetsim.exe` on windows)
+
+<Tabs>
+	<TabItem label="Linux">
+		```bash
+		gonetsim
+		```
+	</TabItem>
+	<TabItem label="Windows">
+		```bash
+		gonetsim.exe
+		```
+	</TabItem>
+</Tabs>
+
+The output will show what services have started & on what ports.
+
+### Configuration
+
+After running `gonetsim` for the first time, a default config file will be generated at `~/.config/gonetsim/config.toml` (or `%APPDATA%\gonetsim\config.toml` on Windows). Configuration files are the primary way to enable, disable & modify services in GoNetSim.
+
+Let's try disabling the DNS service:
+
+<Steps>
+1. Open the config file at `~/.config/gonetsim/config.toml` (or `%APPDATA%\gonetsim\config.toml` on Windows) in a text editor.
+
+2. Find the `[services.dns]` section and set `enabled = false`.
+
+    ```diff
+    ...
+    [dns]
+    - enabled = true
+    + enabled = false
+    listen = ":5354"
+    network = "udp"
+    ipv4 = "127.0.0.1"
+    ipv6 = "::1"
+    ...
+    ```
+
+
+3. Save the file
+
+4. Run `gonetsim` (or `gonetsim.exe` on Windows) again to confirm the changes.
+
+    <Tabs>
+    <TabItem label="Linux">
+    ```bash
+    gonetsim
+    ```
+    </TabItem>
+    <TabItem label="Windows">
+    ```bash
+    gonetsim.exe
+    ```
+    </TabItem>
+    </Tabs>
+</Steps>
+
+If you'd like to learn more about configuration, please see the [configuration guide](/guides/configuration).
+
+## Resources
+
+There are plenty of official resources to help you get started with GoNetSim:
+
+<Card title="Help" icon="help">
+    The built-in `gonetsim help` command shows you all available commands, flags and options for GoNetSim. You can also learn more about specific sub-commands by running `gonetsim help <sub-command>` (e.g. `gonetsim help version`)
+
+    <Tabs>
+        <TabItem label="Linux">
+            ```bash
+            gonetsim help
+            ```
+        </TabItem>
+        <TabItem label="Windows">
+            ```bash
+            gonetsim.exe help
+            ```
+        </TabItem>
+    </Tabs>
+</Card>
+
+<Card title="GitHub" icon="github">
+    The [GoNetSim GitHub repository](https://github.com/lachlanharrisdev/gonetsim) contains the source code, issue tracker and discussions for GoNetSim. 
+
+    <LinkButton href="https://github.com/lachlanharrisdev/gonetsim" variant="secondary" icon="right-arrow">See the repo</LinkButton>
+</Card>
+
+<Card title="Documentation" icon="document">
+    This documentation site contains plenty of guides and references for everything GoNetSim has to offer. If you want to learn more about a specific service, check out the reference section. If you want to learn how to do something specific with GoNetSim, check out the guides section.
+
+    <LinkButton href="/" variant="secondary" icon="right-arrow">Explore the docs</LinkButton>
+</Card>

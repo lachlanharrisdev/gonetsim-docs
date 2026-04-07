@@ -21,6 +21,7 @@ export default defineConfig({
 					items: [
 						// Each item here is one entry in the navigation menu.
 						{ label: 'Installation', slug: 'guides/installation' },
+						{ label: 'Usage', slug: 'guides/usage' },
 						{ label: 'Configuration', slug: 'guides/configuration' },
 						{ label: 'Docker', slug: 'guides/docker' },
 					],

@@ -4,6 +4,8 @@ description: Reference sheet for the DNS service
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
 
 The DNS service simulates a basic DNS server. It currently supports A/AAAA record types, returning a configurable IP address (defaulting to the loopback address) for any query.
 
@@ -22,6 +24,25 @@ When used in combination with the HTTP & HTTPS services, it can be used as a pow
 | `ipv6` | string | `::1` | The IP address to return for AAAA records |
 
 To see instructions on how to configure these options, see the [configuration guide](/guides/configuration).
+
+## Command
+
+The DNS service can be run individually using the `dns` subcommand:
+
+<Tabs>
+<TabItem label="Linux">
+```bash
+gonetsim dns
+```
+</TabItem>
+<TabItem label="Windows">
+```bash
+gonetsim.exe dns
+```
+</TabItem>
+</Tabs>
+
+This starts the DNS service with the current configuration, without starting any other services.
 
 ## Further reading
 

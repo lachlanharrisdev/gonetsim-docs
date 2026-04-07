@@ -25,13 +25,32 @@ In "Real" mode, a directory can be specified and the server will serve static fi
 
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
-| `enabled` | bool | `true` | Whether the HTTP service is enabled |
+| `enabled` | bool | `true` | Whether the HTTPS service is enabled |
 | `listen` | string | `:8443` | The address and port to listen on (e.g. `:8443`) |
 | `status` | int | `200` | The status code to return in "Fake" mode |
 | `cert` | string | `""` | The path to the TLS certificate file (PEM format). If empty, a self-signed certificate will be generated |
 | `key` | string | `""` | The path to the TLS key file (PEM format). If empty, a self-signed key will be generated |
 
 To see instructions on how to configure these options, see the [configuration guide](/guides/configuration).
+
+## Command
+
+The HTTPS service can be run individually using the `https` subcommand:
+
+<Tabs>
+<TabItem label="Linux">
+```bash
+gonetsim https
+```
+</TabItem>
+<TabItem label="Windows">
+```bash
+gonetsim.exe https
+```
+</TabItem>
+</Tabs>
+
+This starts the HTTPS service with the current configuration, without starting any other services (Including the HTTP service; the HTTP service is not started with this command). 
 
 ## Further reading
 

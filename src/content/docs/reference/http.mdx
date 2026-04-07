@@ -32,6 +32,25 @@ In "Real" mode, a directory can be specified and the server will serve static fi
 
 To see instructions on how to configure these options, see the [configuration guide](/guides/configuration).
 
+## Command
+
+The HTTP service can be run individually using the `http` subcommand:
+
+<Tabs>
+<TabItem label="Linux">
+```bash
+gonetsim http
+```
+</TabItem>
+<TabItem label="Windows">
+```bash
+gonetsim.exe http
+```
+</TabItem>
+</Tabs>
+
+This starts the HTTP service with the current configuration, without starting any other services (Including the HTTPS service; the HTTPS service is not started with this command). 
+
 ## Further reading
 
-- See the basic [configuration guide](/guides/configuration) for a walkthrough on configuration
+- See the [configuration guide](/guides/configuration) for a walkthrough on configuration
