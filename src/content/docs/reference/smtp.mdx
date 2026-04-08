@@ -1,0 +1,92 @@
+---
+title: SMTP
+description: Reference sheet for the SMTP service
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import { Steps } from '@astrojs/starlight/components';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+The SMTP service simulates an ESMTP (Extended Simple Mail Transfer Protocol) server. It supports the following commands:
+- `HELO`/`EHLO`: Greet the server and identify the client
+- `AUTH`: Authenticate with the server using `PLAIN` authentication
+- `MAIL FROM`: Specify the sender's email address
+- `RCPT TO`: Specify the recipient's email address
+- `DATA`: Send the email content (headers and body)
+- `QUIT`: Terminate the connection
+
+## Configuration
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `enabled` | bool | `true` | Whether the SMTP service is enabled |
+| `addr` | string | `:1025` | The address and port to listen on (e.g. `:1025`) |
+| `domain` | string | `localhost` | The domain name to use in the server's responses |
+| `write_timeout` | int | `10` | The timeout for writing data to the client, in seconds |
+| `read_timeout` | int | `10` | The timeout for reading data from the client, in seconds |
+| `max_message_bytes` | int | `1048576` (1024*1024, 1MB) | The maximum size of an email message, in bytes |
+| `max_recipients` | int | `50` | The maximum number of recipients allowed per email |
+| `allow_insecure_auth` | bool | `true` | Whether to allow insecure authentication methods (i.e. `PLAIN` without TLS) |
+
+To see instructions on how to configure these options, see the [configuration guide](/guides/configuration).
+
+## Command
+
+The SMTP service can be run individually using the `smtp` subcommand:
+
+<Tabs>
+<TabItem label="Linux">
+```bash
+gonetsim smtp
+```
+</TabItem>
+<TabItem label="Windows">
+```bash
+gonetsim.exe smtp
+```
+</TabItem>
+</Tabs>
+
+This starts the SMTP service with the current configuration, without starting any other services.
+
+## Testing
+
+You can test the SMTP service using `netcat`.
+
+<Steps>
+
+1. Start the SMTP service
+
+    ```bash
+    gonetsim smtp
+    ```
+
+2. In another terminal session, connect to the SMTP service using `netcat`
+
+    ```bash
+    netcat -C localhost 1025
+    ```
+
+3. Enter the following SMTP commands to send an email
+
+    ```bash
+    EHLO example.com
+    AUTH PLAIN 
+    AHVzZXJuYW1lAHBhc3N3b3Jk
+    MAIL FROM:<test@localhost>
+    RCPT TO:<hello@localhost>
+    DATA
+    Hello!
+    .
+    ```
+
+    <Aside>You only have `read_timeout` seconds to enter each command before the server closes the connection. If you get disconnected, just reconnect and try again.</Aside>
+
+4. Return to the GoNetSim instance and you should see the email being logged
+
+</Steps>
+
+## Further reading
+
+- See the basic [configuration guide](/guides/configuration) for a walkthrough on configuration
+- See the [SMTPS reference sheet](/reference/smtps) for information on the SMTPS service

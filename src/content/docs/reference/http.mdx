@@ -51,6 +51,27 @@ gonetsim.exe http
 
 This starts the HTTP service with the current configuration, without starting any other services (Including the HTTPS service; the HTTPS service is not started with this command). 
 
+## Testing
+
+You can test the HTTP service using `curl`.
+
+<Steps>
+1. Start the HTTP service
+
+    ```bash
+    gonetsim http
+    ```
+2. In a separate terminal, make a request to the service using `curl`
+
+    ```bash
+    curl https://localhost:8080
+    ```
+
+3. Return to the GoNetSim instance and you should see a log of the request in the output
+
+</Steps>
+
 ## Further reading
 
 - See the [configuration guide](/guides/configuration) for a walkthrough on configuration
+- See the [HTTPS reference sheet](/reference/https) for information on the HTTPS service

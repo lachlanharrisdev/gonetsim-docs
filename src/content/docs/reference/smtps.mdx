@@ -1,0 +1,86 @@
+---
+title: SMTPS
+description: Reference sheet for the SMTPS service
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import { Steps } from '@astrojs/starlight/components';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+The SMTPS service simulates an ESMTP (Extended Simple Mail Transfer Protocol) server, and extends it with TLS support. For more information on supported commands please see the [SMTP reference sheet](/reference/smtp).
+
+## Configuration
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `enabled` | bool | `true` | Whether the SMTPS service is enabled |
+| `addr` | string | `:1465` | The address and port to listen on (e.g. `:1465`) |
+| `domain` | string | `localhost` | The domain name to use in the server's responses |
+| `write_timeout` | int | `10` | The timeout for writing data to the client, in seconds |
+| `read_timeout` | int | `10` | The timeout for reading data from the client, in seconds |
+| `max_message_bytes` | int | `1048576` (1024*1024, 1MB) | The maximum size of an email message, in bytes |
+| `max_recipients` | int | `50` | The maximum number of recipients allowed per email |
+| `allow_insecure_auth` | bool | `false` | Whether to allow insecure authentication methods (i.e. `PLAIN` without TLS) |
+
+To see instructions on how to configure these options, see the [configuration guide](/guides/configuration).
+
+## Command
+
+The SMTPS service can be run individually using the `smtps` subcommand:
+
+<Tabs>
+<TabItem label="Linux">
+```bash
+gonetsim smtps
+```
+</TabItem>
+<TabItem label="Windows">
+```bash
+gonetsim.exe smtps
+```
+</TabItem>
+</Tabs>
+
+This starts the SMTPS service with the current configuration, without starting any other services.
+
+## Testing
+
+You can test the SMTP service using `openssl`.
+
+<Steps>
+
+1. Start the SMTPS service
+
+    ```bash
+    gonetsim smtps
+    ```
+
+2. In another terminal session, connect to the SMTP service using `openssl`
+
+    ```bash
+    openssl s_client -connect localhost:1465 -crlf
+    ```
+
+3. Enter the following SMTP commands to send an email
+
+    ```bash
+    EHLO example.com
+    AUTH PLAIN 
+    AHVzZXJuYW1lAHBhc3N3b3Jk
+    MAIL FROM:<test@localhost>
+    RCPT TO:<hello@localhost>
+    DATA
+    Hello!
+    .
+    ```
+
+    <Aside>You only have `read_timeout` seconds to enter each command before the server closes the connection. If you get disconnected, just reconnect and try again.</Aside>
+
+4. Return to the GoNetSim instance and you should see the email being logged
+
+</Steps>
+
+## Further reading
+
+- See the basic [configuration guide](/guides/configuration) for a walkthrough on configuration
+- See the [SMTP reference sheet](/reference/smtp) for information on the SMTP service, which this service extends, including how to test whether the service is working

@@ -7,7 +7,7 @@ import { Aside } from '@astrojs/starlight/components';
 import { Steps } from '@astrojs/starlight/components';
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 
-The HTTPS service simulates a basic web server. It extends the functionality of the [HTTP service](/reference/http) by adding SSL/TLS support. It has two modes of operation:
+The HTTPS service simulates a basic web server. It extends the functionality of the [HTTP service](/reference/http) by adding TLS support. It has two modes of operation:
 
 <Tabs>
 <TabItem label="Fake">
@@ -52,6 +52,28 @@ gonetsim.exe https
 
 This starts the HTTPS service with the current configuration, without starting any other services (Including the HTTP service; the HTTP service is not started with this command). 
 
+## Testing
+
+You can test the HTTPS service using `curl`.
+
+<Steps>
+1. Start the HTTPS service
+
+    ```bash
+    gonetsim https
+    ```
+2. In a separate terminal, make a request to the service using `curl`
+    <Aside>Since the service uses a self-signed certificate by default, you will need to use the `-k` option to allow insecure connections.</Aside>
+
+    ```bash
+    curl -k https://localhost:8443
+    ```
+
+3. Return to the GoNetSim instance and you should see a log of the request in the output
+
+</Steps>
+
 ## Further reading
 
 - See the basic [configuration guide](/guides/configuration) for a walkthrough on configuration
+- See the [HTTPS reference sheet](/reference/https) for information on the HTTP service, which this service extends

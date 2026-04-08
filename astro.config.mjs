@@ -9,7 +9,7 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			title: 'GoNetSim',
-			favicon: './src/assets/favicon.png',
+			favicon: '/favicon.png',
 			description: 'An unofficial, spiritual successor to INetSim, a suite of tools for simulating common internet services for malware analysis and testing.',
 			logo: {
 				src: './src/assets/logo_transparent.png',

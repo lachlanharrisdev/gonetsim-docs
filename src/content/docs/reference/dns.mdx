@@ -4,6 +4,7 @@ description: Reference sheet for the DNS service
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import { Steps } from '@astrojs/starlight/components';
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 
@@ -47,6 +48,28 @@ gonetsim.exe dns
 </Tabs>
 
 This starts the DNS service with the current configuration, without starting any other services.
+
+## Testing
+
+You can test the DNS service using `dig`.
+
+<Steps>
+1. Start the DNS service
+
+    ```bash
+    gonetsim dns
+    ```
+
+2. In another terminal, run the following command to query for an A record:
+
+    ```bash
+    dig @localhost -p 5353 example.com A
+    ```
+    
+    You should see a response with the IP address you configured for A records (default: `127.0.0.1`)
+
+3. Return to the GoNetSim instance and you should see a log of the query in the output
+</Steps>
 
 ## Further reading
 

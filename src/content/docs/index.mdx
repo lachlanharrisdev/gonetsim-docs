@@ -37,9 +37,19 @@ import { LinkButton } from '@astrojs/starlight/components';
 		<LinkButton href="/reference/http" variant="secondary" icon="right-arrow">Reference</LinkButton>
 	</Card>
 	<Card title="HTTPS" icon="https" link="/reference/https">
-		HTTPS server extending the functionality of the HTTP service by adding SSL/TLS support. Possesses the same two modes of operation as the HTTP service.
+		HTTPS server extending the functionality of the HTTP service by adding TLS support. Possesses the same two modes of operation as the HTTP service.
 
 		<LinkButton href="/reference/https" variant="secondary" icon="right-arrow">Reference</LinkButton>
+	</Card>
+	<Card title="SMTP" icon="smtp" link="/reference/smtp">
+		SMTP server simulating an ESMTP server. Supports basic SMTP commands such as `HELO`/`EHLO`, `AUTH`, `MAIL FROM`, `RCPT TO`, `DATA` & `QUIT`.
+
+		<LinkButton href="/reference/smtp" variant="secondary" icon="right-arrow">Reference</LinkButton>
+	</Card>
+	<Card title="SMTPS" icon="smtps" link="/reference/smtps">
+		SMTPS server extending the functionality of the SMTP service by adding TLS support. Possesses the same commands as the SMTP service.
+
+		<LinkButton href="/reference/smtps" variant="secondary" icon="right-arrow">Reference</LinkButton>
 	</Card>
 </CardGrid>
 

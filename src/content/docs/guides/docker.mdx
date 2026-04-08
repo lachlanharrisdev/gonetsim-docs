@@ -37,6 +37,7 @@ This includes macOS users, as support for standalone macOS binaries are experime
     docker run --rm \
         -p 5353:5353/udp -p 5353:5353/tcp \
         -p 8080:8080 -p 8443:8443 \
+        -p 1025:1025 -p 1465:1465 \
         ghcr.io/lachlanharrisdev/gonetsim:latest
     ```
 
@@ -60,11 +61,15 @@ This includes macOS users, as support for standalone macOS binaries are experime
             #  - "53:5353/tcp"
             #  - "80:8080"
             #  - "443:8443"
+            #  - "25:1025"
+            #  - "465:1465"
             ports:
             - "5353:5353/udp"
             - "5353:5353/tcp"
             - "8080:8080"
             - "8443:8443"
+            - "1025:1025"
+            - "1465:1465"
 
             # by default the image includes a config at /etc/gonetsim/gonetsim.toml.
             # to use a custom config, mount a read-only file over it:
@@ -111,6 +116,7 @@ In some scenarios it may be desirable to build the Docker image from source, suc
     docker run --rm \
         -p 5353:5353/udp -p 5353:5353/tcp \
         -p 8080:8080 -p 8443:8443 \
+        -p 1025:1025 -p 1465:1465 \
         gonetsim:local
     ```
 
@@ -128,6 +134,7 @@ To use a custom configuration, mount a file over this path with the `-v` flag in
 docker run --rm \
     -p 5353:5353/udp -p 5353:5353/tcp \
     -p 8080:8080 -p 8443:8443 \
+    -p 1025:1025 -p 1465:1465 \
     -v /path/to/config.toml:/etc/gonetsim/gonetsim.toml:ro \
     ghcr.io/lachlanharrisdev/gonetsim:latest
 ```
