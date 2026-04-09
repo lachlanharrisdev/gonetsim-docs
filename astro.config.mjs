@@ -36,7 +36,18 @@ export default defineConfig({
 			},
 			customCss: [
 				'./src/styles/custom.css',
-			],
+			], 
+			/*
+			head: [
+				{
+					tag: 'script',
+					attrs: {
+						src: 'https://cloud.umami.is/script.js',
+						defer: true,
+						'data-website-id': '786e8085-a637-4f5f-bd8e-e452871c2281'
+					}
+				}
+			],*/
 
 
 			plugins: [
