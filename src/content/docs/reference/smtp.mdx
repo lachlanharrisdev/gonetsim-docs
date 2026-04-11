@@ -9,7 +9,7 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 The SMTP service simulates an ESMTP (Extended Simple Mail Transfer Protocol) server. It supports the following commands:
 - `HELO`/`EHLO`: Greet the server and identify the client
-- `AUTH`: Authenticate with the server using `PLAIN` authentication
+- `AUTH`: Authenticate with the server using `PLAIN`, `ANONYMOUS` or `LOGIN` authentication
 - `MAIL FROM`: Specify the sender's email address
 - `RCPT TO`: Specify the recipient's email address
 - `DATA`: Send the email content (headers and body)
@@ -26,6 +26,7 @@ The SMTP service simulates an ESMTP (Extended Simple Mail Transfer Protocol) ser
 | `read_timeout` | int | `10` | The timeout for reading data from the client, in seconds |
 | `max_message_bytes` | int | `1048576` (1024*1024, 1MB) | The maximum size of an email message, in bytes |
 | `max_recipients` | int | `50` | The maximum number of recipients allowed per email |
+| `require_auth` | bool | false | Whether authentication (via `AUTH`) is required to send email |
 | `allow_insecure_auth` | bool | `true` | Whether to allow insecure authentication methods (i.e. `PLAIN` without TLS) |
 
 To see instructions on how to configure these options, see the [configuration guide](/guides/configuration).
