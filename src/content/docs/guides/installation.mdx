@@ -132,3 +132,7 @@ The first run of the command will create a default configuration file at `$XDG_C
 You can edit this file to change the default configuration, or specify a different config file with the `--config` flag. 
 
 For more information on configuration, see the [configuration documentation](/guides/configuration/).
+
+The first run will also create persistent TLS certificates if you don't have user-provided ones configured. For more information on this, see the [TLS reference](/docs/reference/tls).
+
+<Aside>It's recommended to install the CA certificate (`gonetsim-ca.pem`) generated on the first run into your analysis VM to avoid TLS warnings. For instructions on how to do this, see the [TLS reference](/docs/reference/tls).</Aside>
