@@ -1,0 +1,79 @@
+---
+title: TLS
+description: Implementation specification & reference for TLS
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import { Steps } from '@astrojs/starlight/components';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+GoNetSim can run HTTPS and SMTPS using either:
+
+- A user-provided certificate/key (configured in `https.cert`/`https.key` and `smtps.cert`/`smtps.key`), or
+- An auto-generated certificate/key.
+
+## Auto-generated TLS
+
+When `https.cert`/`https.key` (or `smtps.cert`/`smtps.key`) are not set, GoNetSim will use a persisted, auto-generated keypair stored next to the active `config.toml`.
+
+The following files are created in the same directory as `config.toml` if they don't already exist:
+
+- `gonetsim-cert.pem`: server certificate PEM
+- `gonetsim-key.pem`: server private key PEM
+- `gonetsim-ca.pem`: CA certificate PEM 
+
+On subsequent starts, if `gonetsim-cert.pem` and `gonetsim-key.pem` exist, GoNetSim reuses them. This keeps the server certificate stable across restarts, and is useful for malware which pin certificates.
+
+## Trusting the CA certificate
+
+To avoid TLS warnings in tools/browsers, install the CA certificate (`gonetsim-ca.pem`) into your analysis VM.
+
+<Tabs>
+<TabItem label="Linux">
+<Steps>
+1. Copy `gonetsim-ca.pem` to your local user's CA certificates directory
+
+    ```bash
+    sudo cp ~/.config/gonetsim/gonetsim-ca.pem /usr/local/share/ca-certificates/gonetsim-ca.crt
+    ```
+
+2. Update the CA certificates
+
+    ```bash
+    sudo update-ca-certificates
+    ```
+</Steps>
+</TabItem>
+
+<TabItem label="Windows">
+<Steps>
+1. Open `certmgr.msc`
+
+2. Import `gonetsim-ca.pem` into **Trusted Root Certification Authorities** (Local Computer or Current User, depending on your tooling)
+</Steps>
+</TabItem>
+
+<TabItem label="Docker">
+
+The Docker container comes with the CA certificate (`gonetsim-ca.pem`) pre-installed in the system trust store, so no additional steps are needed to trust the certificate.
+
+</TabItem>
+</Tabs>
+
+## Regenerating the auto-generated certificates
+
+<Steps>
+1. Delete the persisted files next to `config.toml`
+
+   - `gonetsim-cert.pem`
+   - `gonetsim-key.pem`
+   - `gonetsim-ca.pem`
+
+2. Restart GoNetSim
+</Steps>
+
+## Further reading
+
+- See the basic [configuration guide](/guides/configuration) for a walkthrough on configuration
+- See the [HTTPS reference](/docs/reference/https) for HTTPS-specific TLS options
+- See the [SMTPS reference](/docs/reference/smtps) for SMTPS-specific TLS options
