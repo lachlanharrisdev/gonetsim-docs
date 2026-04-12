@@ -101,13 +101,19 @@ The source repository can be found [here](https://github.com/lachlanharrisdev/go
 
     A single binary named `gonetsim` should be extracted to the current working directory
 
-3. Move the extracted binary to a directory in your PATH
+3. Allow permission to listen on priveleged ports. This stops the binary from requiring `sudo` to run
+
+    ```bash
+    sudo setcap 'cap_net_admin,cap_net_raw+eip' gonetsim
+    ```
+
+4. Move the extracted binary to a directory in your PATH
 
     ```bash
     sudo mv gonetsim /usr/local/bin/
     ```
 
-4. Verify the installation
+5. Verify the installation
     ```bash
     gonetsim --version
     ```
