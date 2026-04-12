@@ -14,7 +14,7 @@ The SMTPS service simulates an ESMTP (Extended Simple Mail Transfer Protocol) se
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
 | `enabled` | bool | `true` | Whether the SMTPS service is enabled |
-| `addr` | string | `:1465` | The address and port to listen on (e.g. `:1465`) |
+| `addr` | string | `:1465` | The address and port to listen on (e.g. `:465`) |
 | `domain` | string | `localhost` | The domain name to use in the server's responses |
 | `write_timeout` | int | `10` | The timeout for writing data to the client, in seconds |
 | `read_timeout` | int | `10` | The timeout for reading data from the client, in seconds |
@@ -59,7 +59,7 @@ You can test the SMTP service using `openssl`.
 2. In another terminal session, connect to the SMTP service using `openssl`
 
     ```bash
-    openssl s_client -connect localhost:1465 -crlf
+    openssl s_client -connect localhost:465 -crlf
     ```
 
 3. Enter the following SMTP commands to send an email

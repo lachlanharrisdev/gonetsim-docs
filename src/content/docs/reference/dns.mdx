@@ -19,7 +19,7 @@ When used in combination with the HTTP & HTTPS services, it can be used as a pow
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
 | `enabled` | bool | `true` | Whether the DNS service is enabled |
-| `listen` | string | `:5353` | The address and port to listen on (e.g. `:5353`) |
+| `listen` | string | `:5353` | The address and port to listen on (e.g. `:53`) |
 | `network` | string | `udp` | The network protocol to use (e.g. `udp`, `tcp`) |
 | `ipv4` | string | `127.0.0.1` | The IP address to return for A records |
 | `ipv6` | string | `::1` | The IP address to return for AAAA records |
@@ -63,7 +63,7 @@ You can test the DNS service using `dig`.
 2. In another terminal, run the following command to query for an A record:
 
     ```bash
-    dig @localhost -p 5353 example.com A
+    dig @localhost -p 53 example.com A
     ```
     
     You should see a response with the IP address you configured for A records (default: `127.0.0.1`)

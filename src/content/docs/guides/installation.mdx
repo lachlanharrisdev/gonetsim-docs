@@ -104,7 +104,7 @@ The source repository can be found [here](https://github.com/lachlanharrisdev/go
 3. Allow permission to listen on priveleged ports. This stops the binary from requiring `sudo` to run
 
     ```bash
-    sudo setcap 'cap_net_admin,cap_net_raw+eip' gonetsim
+    sudo setcap 'cap_net_bind_service=+ep' gonetsim
     ```
 
 4. Move the extracted binary to a directory in your PATH

@@ -39,15 +39,15 @@ Here, we'll disable the DNS service and change the listen address for the HTTP s
 [dns]
 - enabled = true
 + enabled = false
-listen = ":5354"
+listen = ":53"
 network = "udp"
 ipv4 = "127.0.0.1"
 ipv6 = "::1"
 
 [http]
 enabled = false
-- listen = ":8080"
-+ listen = ":8081"
+- listen = ":80"
++ listen = ":8080"
 status = 200
 ...
 ```

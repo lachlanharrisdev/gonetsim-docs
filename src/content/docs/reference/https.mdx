@@ -26,7 +26,7 @@ In "Real" mode, a directory can be specified and the server will serve static fi
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
 | `enabled` | bool | `true` | Whether the HTTPS service is enabled |
-| `listen` | string | `:8443` | The address and port to listen on (e.g. `:8443`) |
+| `listen` | string | `:8443` | The address and port to listen on (e.g. `:443`) |
 | `status` | int | `200` | The status code to return in "Fake" mode |
 | `cert` | string | `""` | The path to the TLS certificate file (PEM format). If empty, a self-signed certificate will be generated |
 | `key` | string | `""` | The path to the TLS key file (PEM format). If empty, a self-signed key will be generated |
@@ -66,7 +66,7 @@ You can test the HTTPS service using `curl`.
     <Aside>Since the service uses a self-signed certificate by default, you will need to use the `-k` option to allow insecure connections.</Aside>
 
     ```bash
-    curl -k https://localhost:8443
+    curl -k https://localhost
     ```
 
 3. Return to the GoNetSim instance and you should see a log of the request in the output
