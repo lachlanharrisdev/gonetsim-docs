@@ -67,6 +67,16 @@ The source repository can be found [here](https://github.com/lachlanharrisdev/go
 <Aside type="danger">macOS binaries are not built by the maintainer(s) of GoNetSim. To use GoNetSim on macOS, please use [dockerised GoNetSim](/guides/docker)</Aside>
 </TabItem>
 <TabItem label="Linux">
+<Tabs>
+<TabItem label="Install script">
+<Aside type="caution">The installation script is a work in progress. Please report any issues on either the [GoNetSim repository](https://github.com/lachlanharrisdev/gonetsim) or the [GoNetSim Docs repository](https://github.com/lachlanharrisdev/gonetsim-docs). If you'd like to inspect the script before use, you can navigate [here](https://gonetsim.lachlanharris.dev/install.sh)</Aside>
+
+```bash
+curl https://gonetsim.lachlanharris.dev/install.sh | sh
+```
+
+</TabItem>
+<TabItem label="Manual installation">
 <Steps>
 
 1. Download the latest release directly from the releases page
@@ -99,18 +109,18 @@ The source repository can be found [here](https://github.com/lachlanharrisdev/go
     </TabItem>
     </Tabs>
 
-    A single binary named `gonetsim` should be extracted to the current working directory
+    A single binary named `GoNetSim` should be extracted to the current working directory
 
-3. Allow permission to listen on priveleged ports. This stops the binary from requiring `sudo` to run
+3. Move the extracted binary to a directory in your PATH (and rename it to `gonetsim`)
 
     ```bash
-    sudo setcap 'cap_net_bind_service=+ep' gonetsim
+    sudo mv GoNetSim /usr/local/bin/gonetsim
     ```
 
-4. Move the extracted binary to a directory in your PATH
+4. Allow permission to listen on privileged ports. This stops the binary from requiring `sudo` to run
 
     ```bash
-    sudo mv gonetsim /usr/local/bin/
+    sudo setcap 'cap_net_bind_service=+ep' /usr/local/bin/gonetsim
     ```
 
 5. Verify the installation
@@ -119,6 +129,8 @@ The source repository can be found [here](https://github.com/lachlanharrisdev/go
     ```
 
 </Steps>
+</TabItem>
+</Tabs>
 </TabItem>
 
 <TabItem label="Docker">
