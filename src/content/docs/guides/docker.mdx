@@ -15,6 +15,11 @@ The image is built from the `main` branch of the GoNetSim repository, and is aut
 Using the Docker image is the preferred method of running GoNetSim if you require long periods of uptime, or none of the pre-built binaries are compatible with your system.
 This includes macOS users, as support for standalone macOS binaries are experimental and do not support notorization.
 
+## Versions
+
+The `latest` tag of the image will point to the latest semver release. This is recommended for most users, as releases are more thoroughly tested and stable than the `main` branch directly.
+
+If you want bleeding edge features or fixes, you can use the `nightly` tag. `nightly` points to the latest build of the `main` branch, or you can choose a specific nightly build with the `nightly-YYYYMMDD` tag. `nightly` builds are done every 24 hours at 2am UTC if new changes have been committed to `main`.
 
 ## Setup
 
@@ -71,8 +76,8 @@ This includes macOS users, as support for standalone macOS binaries are experime
             - "25:25"
             - "465:465"
 
-            # by default the image includes a config at /etc/gonetsim/gonetsim.toml.
-            # to use a custom config, mount a read-only file over it:
+            # by default GoNetSim will generate a config file on first run
+            # If you want to pin the config to /etc/gonetsim/gonetsim.toml, mount it there:
             # volumes:
             #   - ../gonetsim.toml:/etc/gonetsim/gonetsim.toml:ro
     ```
@@ -89,6 +94,14 @@ This includes macOS users, as support for standalone macOS binaries are experime
 <TabItem label="From source">
 
 In some scenarios it may be desirable to build the Docker image from source, such as when testing changes to the image or if you want to use a specific branch or commit of the GoNetSim repository.
+
+### Requirements
+
+* Ko installed on your system. You can install it with the following command:
+
+    ```bash
+    go install github.com/google/ko@v0.18.1
+    ```
 
 <Steps>
 
@@ -107,7 +120,8 @@ In some scenarios it may be desirable to build the Docker image from source, suc
 3. Build the Docker image:
 
     ```bash
-    docker build -f docker/Dockerfile -t gonetsim:local .
+    go install github.com/google/ko@v0.18.1
+    KO_DOCKER_REPO=gonetsim ko build --local --bare --tags=local .
     ```
 
 4. Run the GoNetSim container:
@@ -126,7 +140,11 @@ In some scenarios it may be desirable to build the Docker image from source, suc
 
 ## Usage
 
-The container behaves very similar to the standalone binary, and will read its configuration from `/etc/gonetsim/gonetsim.toml` by default. 
+The container behaves very similar to the standalone binary.
+
+On first start, if no config file is found, GoNetSim will generate a default commented config file (using the embedded `default_config.toml`).
+
+By default it will use the same search paths as the standalone binary. If you mount a config file at `/etc/gonetsim/gonetsim.toml`, it will be used.
 
 To use a custom configuration, mount a file over this path with the `-v` flag in `docker run`:
 
