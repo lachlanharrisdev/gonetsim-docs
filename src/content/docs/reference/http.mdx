@@ -17,7 +17,6 @@ will return a realistic body of that type, and unsupported file extensions will 
 <TabItem label="Real">
 In "Real" mode, a directory can be specified and the server will serve static files from that directory. If a requested file is not found, a 404 response will be returned.
 
-<Aside type="caution">"Real" mode is still in development. Please see the [GitHub Issue](https://github.com/lachlanharrisdev/gonetsim/issues/13) for its current status of development</Aside>
 </TabItem>
 </Tabs>
 
@@ -29,6 +28,8 @@ In "Real" mode, a directory can be specified and the server will serve static fi
 | `enabled` | bool | `true` | Whether the HTTP service is enabled |
 | `listen` | string | `:80` | The address and port to listen on (e.g. `:80`) |
 | `status` | int | `200` | The status code to return in "Fake" mode |
+| `mode` | string | `fake` | Which mode to use when serving files |
+| `root_dir` | string | `./` | Which directory to serve files from in "Real" mode |
 
 To see instructions on how to configure these options, see the [configuration guide](/guides/configuration).
 
@@ -37,7 +38,7 @@ To see instructions on how to configure these options, see the [configuration gu
 The HTTP service can be run individually using the `http` subcommand:
 
 <Tabs>
-<TabItem label="Linux">
+<TabItem label="Linux / MacOS">
 ```bash
 gonetsim http
 ```

@@ -8,11 +8,9 @@ import { Steps } from '@astrojs/starlight/components';
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 
-The DNS service simulates a DNS server, currently supporting A, AAAA, CNAME, TXT, NS, SRV, PTR & MX, and a generic response for any other record types. The returned IPv4, IPv6, domain name (for CNAME, MX & NS) and TXT values can all be separately configured.
+The DNS service simulates a DNS server, currently supporting `A`, `AAAA`, `CNAME`, `TXT`, `NS`, `SRV`, `PTR`, `MX`, `SOA` & `CAA`, and a generic response for any other record types. The returned IPv4, IPv6, domain name (for `CNAME`, `MX` & `NS`) and `TXT` values can all be separately configured.
 
 When used in combination with the HTTP & HTTPS services, it can be used as a powerful monitor for any attempted connections to C2 domains & covers most of the simulation needs for basic malware analysis.
-
-<Aside>Support for other record types (including TXT, CNAME & MX) is planned for a future release</Aside>
 
 ## Configuration
 
@@ -35,7 +33,7 @@ To see instructions on how to configure these options, see the [configuration gu
 The DNS service can be run individually using the `dns` subcommand:
 
 <Tabs>
-<TabItem label="Linux">
+<TabItem label="Linux / MacOS">
 ```bash
 gonetsim dns
 ```

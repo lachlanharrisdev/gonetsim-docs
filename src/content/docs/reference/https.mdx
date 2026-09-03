@@ -14,9 +14,8 @@ The HTTPS service simulates a basic web server. It extends the functionality of 
 In "Fake" mode, requests to any URL will return a generic response with a configurable status code, headers and body. 
 </TabItem>
 <TabItem label="Real">
-In "Real" mode, a directory can be specified and the server will serve static files from that directory. If a requested file is not found, a 404 response will be returned.
+In "Real" mode, a directory can be specified and the server will serve static files from that directory. If a requested file is not found, a 404 response will be returned. 
 
-<Aside type="caution">"Real" mode is still in development. Please see the [GitHub Issue](https://github.com/lachlanharrisdev/gonetsim/issues/13) for its current status of development</Aside>
 </TabItem>
 </Tabs>
 
@@ -28,6 +27,8 @@ In "Real" mode, a directory can be specified and the server will serve static fi
 | `enabled` | bool | `true` | Whether the HTTPS service is enabled |
 | `listen` | string | `:443` | The address and port to listen on (e.g. `:443`) |
 | `status` | int | `200` | The status code to return in "Fake" mode |
+| `mode` | string | `fake` | Which mode to use when serving files |
+| `root_dir` | string | `./` | Which directory to serve files from in "Real" mode |
 | `cert` | string | `""` | The path to the TLS certificate file (PEM format). If empty, a self-signed certificate will be generated |
 | `key` | string | `""` | The path to the TLS key file (PEM format). If empty, a self-signed key will be generated |
 
@@ -38,7 +39,7 @@ To see instructions on how to configure these options, see the [configuration gu
 The HTTPS service can be run individually using the `https` subcommand:
 
 <Tabs>
-<TabItem label="Linux">
+<TabItem label="Linux / MacOS">
 ```bash
 gonetsim https
 ```

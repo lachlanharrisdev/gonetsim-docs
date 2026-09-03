@@ -28,15 +28,18 @@ The SMTP service simulates an ESMTP (Extended Simple Mail Transfer Protocol) ser
 | `max_recipients` | int | `50` | The maximum number of recipients allowed per email |
 | `require_auth` | bool | false | Whether authentication (via `AUTH`) is required to send email |
 | `allow_insecure_auth` | bool | `true` | Whether to allow insecure authentication methods (i.e. `PLAIN` without TLS) |
+| `log_credentials` | bool | `false` | Whether to log plaintext passwords on successful authentication risk |
 
 To see instructions on how to configure these options, see the [configuration guide](/guides/configuration).
+
+<Aside type="caution">`log_credentials` is highly recommended to leave off unless absolutely necessary and in a secure environment</Aside>
 
 ## Command
 
 The SMTP service can be run individually using the `smtp` subcommand:
 
 <Tabs>
-<TabItem label="Linux">
+<TabItem label="Linux / MacOS">
 ```bash
 gonetsim smtp
 ```

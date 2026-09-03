@@ -29,7 +29,7 @@ On subsequent starts, if `gonetsim-cert.pem` and `gonetsim-key.pem` exist, GoNet
 To avoid TLS warnings in tools/browsers, install the CA certificate (`gonetsim-ca.pem`) into your analysis VM.
 
 <Tabs>
-<TabItem label="Linux">
+<TabItem label="Linux / MacOS">
 <Steps>
 1. Copy `gonetsim-ca.pem` to your local user's CA certificates directory
 
@@ -52,16 +52,21 @@ To avoid TLS warnings in tools/browsers, install the CA certificate (`gonetsim-c
 2. Import `gonetsim-ca.pem` into **Trusted Root Certification Authorities** (Local Computer or Current User, depending on your tooling)
 </Steps>
 </TabItem>
-
-<TabItem label="Docker">
-
-The Docker container comes with the CA certificate (`gonetsim-ca.pem`) pre-installed in the system trust store, so no additional steps are needed to trust the certificate.
-
-</TabItem>
 </Tabs>
 
 ## Regenerating the auto-generated certificates
 
+<Tabs>
+<TabItem label="Automatic">
+
+Run the `tls --force` command
+
+```bash
+gonetsim tls --force
+```
+
+</TabItem>
+<TabItem label="Manual">
 <Steps>
 1. Delete the persisted files next to `config.toml`
 
@@ -71,6 +76,16 @@ The Docker container comes with the CA certificate (`gonetsim-ca.pem`) pre-insta
 
 2. Restart GoNetSim
 </Steps>
+</TabItem>
+</Tabs>
+
+## Validating TLS
+
+You can verify the TLS certificates with the `tls --verify-only` flag
+
+```bash
+gonetsim tls --verify-only
+```
 
 ## Further reading
 

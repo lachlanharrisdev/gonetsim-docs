@@ -59,3 +59,22 @@ The full list of configuration options can be found in the reference documentati
 ## Default Configuration File
 
 The default configuration file / template can be found [here](https://github.com/lachlanharrisdev/gonetsim/blob/main/internal/config/default_config.toml) from the GitHub repository. This file is also generated on the first run of GoNetSim at the default location described above.
+
+## Validating Configuration
+
+The `gonetsim check` command can be used to validate a configuration file. It automatically chooses the config file based on the same selection mechanism.
+
+To validaate configuration, simply run the following:
+
+<Tabs>
+<TabItem label="Linux / MacOS">
+```bash
+gonetsim check
+```
+</TabItem>
+<TabItem label="Windows">
+```bash
+gonetsim.exe check
+```
+</TabItem>
+</Tabs>
