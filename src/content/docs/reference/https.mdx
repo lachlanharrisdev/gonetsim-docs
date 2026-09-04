@@ -36,17 +36,17 @@ To see instructions on how to configure these options, see the [configuration gu
 
 ## Command
 
-The HTTPS service can be run individually using the `https` subcommand:
+The HTTPS service can be run on its own by passing it as a target to `run`:
 
 <Tabs>
 <TabItem label="Linux / MacOS">
 ```bash
-gonetsim https
+gonetsim run https
 ```
 </TabItem>
 <TabItem label="Windows">
 ```bash
-gonetsim.exe https
+gonetsim.exe run https
 ```
 </TabItem>
 </Tabs>
@@ -61,7 +61,7 @@ You can test the HTTPS service using `curl`.
 1. Start the HTTPS service
 
     ```bash
-    gonetsim https
+    gonetsim run https
     ```
 2. In a separate terminal, make a request to the service using `curl`
     <Aside>Since the service uses a self-signed certificate by default, you will need to use the `-k` option to allow insecure connections.</Aside>

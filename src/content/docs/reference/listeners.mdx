@@ -1,0 +1,111 @@
+---
+title: Listeners
+description: Reference sheet for custom listeners
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import { Steps } from '@astrojs/starlight/components';
+
+Custom listeners are generic TCP/UDP listeners that extend GoNetSim beyond the built-in services. Each listener runs a *handler*: either one of the built-in catch-alls, or a Lua script for anything protocol-specific. Handlers are written about in detail in the [scripting section](/scripting/getting-started).
+
+## Handler Specs
+
+Every listener runs the handler named in its `handler` option:
+
+| Handler | Description |
+| --- | --- |
+| `builtin:echo` | Echoes all received data back to the client |
+| `builtin:sink` | Consumes & discards all received data |
+| `lua:<path>` | Serves the connection with a Lua script (path relative to the config file) |
+
+The builtins cover the common catch-all cases during analysis: `echo` keeps clients that expect a mirror happy, and `sink` quietly swallows traffic you only want to capture.
+
+## Configuration
+
+Listeners are defined as `[[listeners]]` entries in the config file, one block per listener:
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `name` | string | - | A unique name, used in logs & capture folders |
+| `enabled` | bool | `true` | Whether the listener runs when starting all services |
+| `type` | string | `tcp` | The network protocol to use (`tcp` or `udp`) |
+| `listen` | string | - | The address and port to listen on (e.g. `:6667`) |
+| `handler` | string | - | The handler spec to run, see above |
+| `read_timeout` | duration | `30s` | How long a connection may stay idle before being closed |
+| `tls` | bool | `false` | Whether to wrap the listener in TLS (TCP only) |
+| `tls_cert` | string | - | Path to a TLS certificate PEM (optional) |
+| `tls_key` | string | - | Path to a TLS key PEM (optional) |
+| `capture` | bool | `true` | Whether to save what each client sends to the artifacts directory |
+
+```toml
+[[listeners]]
+name = "irc"
+type = "tcp"
+listen = ":6667"
+handler = "lua:handlers/irc.lua"
+read_timeout = "60s"
+capture = true
+```
+
+<Aside>With `tls = true` and no cert or key provided, a self-signed certificate is generated & persisted next to your config file. Most sandboxed malware accepts any certificate, so this is usually all you need.</Aside>
+
+## Inline Listeners
+
+Listeners can also be started directly from the command line, without any configuration, by passing a target of the form `handler@address` to `run`:
+
+```bash
+gonetsim run echo@:7777           # builtin echo listener on TCP
+gonetsim run sink@:9999/udp       # builtin sink listener on UDP
+gonetsim run lua:handlers/irc.lua@:6667
+gonetsim run handlers/irc.lua@:6667   # .lua implies lua:
+```
+
+Inline listeners are ideal for quick tests. No config file is created or required, and they can be tweaked with [run flags](/guides/usage) like `--tls` or `--artifacts`.
+
+## Running
+
+Named listeners start alongside the built-in services with `gonetsim`, or on their own as a run target:
+
+<Tabs>
+<TabItem label="Linux / MacOS">
+```bash
+gonetsim run irc
+```
+</TabItem>
+<TabItem label="Windows">
+```bash
+gonetsim.exe run irc
+```
+</TabItem>
+</Tabs>
+
+Naming a listener on the command line runs it even when `enabled = false` in the config, which makes it easy to keep a library of listeners defined but start them only when an analysis session needs them.
+
+## Capture
+
+When `capture` is enabled (the default), everything a client sends is written under `artifacts/<listener name>/`, one file per connection, named with a timestamp & the client's address. Named `capture:write` sections appear inside the file as `=== name ===` headers, making it easy to skim captured commands.
+
+See the [Lua API](/scripting/api) for writing capture calls from scripts.
+
+## Testing
+
+The `gonetsim check` command validates each enabled listener: configuration, handler resolution (including Lua compilation) and whether its port can be bound.
+
+<Steps>
+1. Add a listener to your config file, as above
+
+2. Run `gonetsim check`:
+
+    ```bash
+    irc      OK        tcp :6667 lua:handlers/irc.lua
+    ```
+
+3. A `FAIL` row explains exactly what's wrong, including Lua syntax errors & the line they occur on
+</Steps>
+
+## Further Reading
+
+- See the [configuration guide](/guides/configuration) for how config files are located & structured
+- See the [scripting section](/scripting/getting-started) for writing your own handlers
+- Browse [example handlers](https://github.com/lachlanharrisdev/gonetsim/tree/main/examples) in the GoNetSim repository

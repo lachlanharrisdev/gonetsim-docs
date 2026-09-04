@@ -1,0 +1,138 @@
+---
+title: Examples
+description: Complete, runnable Lua handlers for common protocols
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import { LinkButton } from '@astrojs/starlight/components';
+
+Each example below is a complete handler. You can save it as a `.lua` file and run it with `gonetsim run <file>.lua@<port>`, or wire it into your config as a [custom listener](/reference/listeners).
+
+## Echo
+
+Sends everything back to the client.
+
+```lua
+function handle(conn)
+    while true do
+        local data = conn:read(4096)
+        if not data then break end
+        conn:write(data)
+    end
+end
+```
+
+Try it with `netcat localhost 7777`. GoNetSim also ships this as a built-in (`builtin:echo`) so you don't normally need to write it yourself.
+
+## UDP Responder
+
+UDP scripts define `handle_packet` instead of `handle`. Each datagram is passed in as a string, and returning a string sends a reply back to the client.
+
+```lua
+function handle_packet(data)
+    if data == "ping" then
+        return "pong"
+    end
+    return nil -- no reply for anything else
+end
+```
+
+Run it on UDP with the `/udp` suffix, then test it:
+
+```bash
+gonetsim run pong.lua@:9999/udp
+echo "ping" | netcat -u localhost 9999   # replies with: pong
+```
+
+## IRC
+
+This handler tracks a nickname across commands and answers the few IRC messages malware usually needs to see:
+
+```lua
+function handle(conn)
+    local nick = "guest"
+
+    conn:write(":gonetsim 001 " .. nick .. " :Welcome to GoNetSim IRC\r\n")
+
+    while true do
+        local line = conn:read_line()
+        if not line then break end
+        line = line:gsub("%s+$", "")
+
+        if line ~= "" then
+            capture:write("irc", line)
+
+            local cmd = line:match("^(%S+)")
+            if cmd == "NICK" then
+                nick = line:match("^NICK%s+(%S+)") or nick
+                conn:write(":gonetsim 001 " .. nick .. " :Nickname set\r\n")
+            elseif cmd == "PING" then
+                conn:write(":gonetsim PONG gonetsim :" .. line:match("^PING%s+(.+)$") .. "\r\n")
+            elseif cmd == "PRIVMSG" then
+                conn:write(":gonetsim 001 " .. nick .. " :Message received\r\n")
+            elseif cmd == "QUIT" then
+                break
+            end
+        end
+    end
+end
+```
+
+Point an IRC client at it, or a sample of malware that beacon's over IRC, and every `PRIVMSG` it sends is captured under an `=== irc ===` section in the artifacts directory.
+
+## HTTP Headers
+
+`read_until` makes header-style protocols easy. This handler collects everything up to the blank line ending an HTTP header block, then replies with a fake page:
+
+```lua
+function handle(conn)
+    local headers = conn:read_until("\r\n\r\n")
+    if headers then
+        capture:write("request", headers)
+        local body = "<html><body>GoNetSim</body></html>"
+        conn:write("HTTP/1.1 200 OK\r\n")
+        conn:write("Content-Length: " .. #body .. "\r\n")
+        conn:write("Connection: close\r\n\r\n")
+        conn:write(body)
+    end
+end
+```
+
+For real HTTP simulation you'll want the built-in [HTTP service](/reference/http) instead, this pattern is for custom, HTTP-ish protocols.
+
+<Aside>Notice `#body`, Lua's length operator. `#` works on strings and is the usual way to get a byte count.</Aside>
+
+## Binary Messages
+
+Binary C2 protocols usually frame messages with a length prefix. `string.pack` & `string.unpack` handle the byte-level work:
+
+```lua
+-- Echoes 2-byte big-endian length-prefixed messages back to the client.
+function handle(conn)
+    while true do
+        local head = conn:read(2)
+        if not head then break end
+        local len = string.unpack(">H", head)
+
+        local body = conn:read(len)
+        if not body then break end
+        capture:write("message", body)
+
+        conn:write(string.pack(">H", #body) .. body)
+    end
+end
+```
+
+Run it with `gonetsim run messages.lua@:9000` and probe it:
+
+```bash
+printf '\x00\x05hello' | netcat localhost 9000   # replies with \x00\x05hello
+```
+
+`string.pack`/`string.unpack` support signed & unsigned integers from 1 to 8 bytes, floats, zero-terminated and length-prefixed strings — see the [Lua API](/scripting/api) for the full format list.
+
+## More Examples
+
+The [GoNetSim repository](https://github.com/lachlanharrisdev/gonetsim/tree/main/examples) ships a full set of example handlers, including a complete IRC server & a stateful FTP server with login tracking.
+
+<LinkButton href="https://github.com/lachlanharrisdev/gonetsim/tree/main/examples" variant="secondary" icon="external">Browse the examples</LinkButton>

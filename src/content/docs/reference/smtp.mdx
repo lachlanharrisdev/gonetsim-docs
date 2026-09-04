@@ -20,7 +20,7 @@ The SMTP service simulates an ESMTP (Extended Simple Mail Transfer Protocol) ser
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
 | `enabled` | bool | `true` | Whether the SMTP service is enabled |
-| `addr` | string | `:25` | The address and port to listen on (e.g. `:25`) |
+| `listen` | string | `:25` | The address and port to listen on (e.g. `:25`) |
 | `domain` | string | `localhost` | The domain name to use in the server's responses |
 | `write_timeout` | int | `10` | The timeout for writing data to the client, in seconds |
 | `read_timeout` | int | `10` | The timeout for reading data from the client, in seconds |
@@ -32,21 +32,23 @@ The SMTP service simulates an ESMTP (Extended Simple Mail Transfer Protocol) ser
 
 To see instructions on how to configure these options, see the [configuration guide](/guides/configuration).
 
+<Aside type="note">Older versions of GoNetSim used the option `addr` for the listen address. It still works, but `listen` is preferred & matches the other services.</Aside>
+
 <Aside type="caution">`log_credentials` is highly recommended to leave off unless absolutely necessary and in a secure environment</Aside>
 
 ## Command
 
-The SMTP service can be run individually using the `smtp` subcommand:
+The SMTP service can be run on its own by passing it as a target to `run`:
 
 <Tabs>
 <TabItem label="Linux / MacOS">
 ```bash
-gonetsim smtp
+gonetsim run smtp
 ```
 </TabItem>
 <TabItem label="Windows">
 ```bash
-gonetsim.exe smtp
+gonetsim.exe run smtp
 ```
 </TabItem>
 </Tabs>
@@ -62,7 +64,7 @@ You can test the SMTP service using `netcat`.
 1. Start the SMTP service
 
     ```bash
-    gonetsim smtp
+    gonetsim run smtp
     ```
 
 2. In another terminal session, connect to the SMTP service using `netcat`

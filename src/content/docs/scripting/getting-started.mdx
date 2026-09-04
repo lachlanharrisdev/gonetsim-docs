@@ -1,0 +1,120 @@
+---
+title: Getting Started
+description: Write your first custom listener handler in Lua
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import { Steps } from '@astrojs/starlight/components';
+import { Aside } from '@astrojs/starlight/components';
+
+Custom listeners let GoNetSim simulate almost any TCP or UDP protocol, using small scripts written in [Lua](https://www.lua.org). They fill the gap left by the built-in services: when malware speaks a protocol that DNS, HTTP or SMTP can't cover, you can write a handler for it in a few lines.
+
+The idea is simple. When a client connects, GoNetSim hands the connection to your script. Your script reads what the client sends, decides what to reply, and GoNetSim takes care of logging, timeouts, and saving what the client sent.
+
+## How It Works
+
+A script is just a file that defines a `handle` function:
+
+```lua
+function handle(conn)
+    -- your protocol logic here
+end
+```
+
+A few rules keep scripts predictable:
+
+- Each client gets its own run of the script, so connections do not share state with each other.
+- A script can't touch the file system or run programs. It talks to the network through the provided `conn` object, writes to the log with `log`, and saves client data with `capture`.
+- If a script fails mid-connection, that connection is closed and the error is logged, but the listener can still serve other clients.
+
+<Aside>No prior Lua experience is needed for most handlers. The scripting API is deliberately tiny</Aside>
+
+## Your First Handler
+
+Let's write a handler that pretends to be a simple greeting service. Save the following as `greet.lua`:
+
+```lua
+function handle(conn)
+    conn:write("Welcome to GoNetSim\r\n")
+
+    while true do
+        local line = conn:read_line()
+        if not line then break end -- client closed the connection
+        capture:write("greet", line)
+        conn:write("You said: " .. line)
+    end
+end
+```
+
+Every line the client sends is captured to the artifacts directory, then echoed back with a prefix.
+
+## Running It
+
+### Inline
+
+The quickest way to run a script is an inline listener:
+
+<Tabs>
+<TabItem label="Linux / MacOS">
+```bash
+gonetsim run greet.lua@:8080
+```
+</TabItem>
+<TabItem label="Windows">
+```bash
+gonetsim.exe run greet.lua@:8080
+```
+</TabItem>
+</Tabs>
+
+The `.lua` file extension tells GoNetSim this is a Lua handler, so no configuration is needed at all. Inline listeners are perfect for quickly testing a handler before wiring it into your setup.
+
+### From Configuration
+
+To run the handler every time, add it to your config file as a custom listener:
+
+```toml
+[[listeners]]
+name = "greet"
+type = "tcp"
+listen = ":8080"
+handler = "lua:handlers/greet.lua"
+```
+
+Script paths are relative to the config file, so keeping your handlers next to the config keeps things tidy. See the [listeners reference](/reference/listeners) for the full list of options.
+
+## Testing It
+
+You can test the handler with `netcat`:
+
+<Steps>
+1. Start the listener in one terminal
+
+    ```bash
+    gonetsim run greet.lua@:8080
+    ```
+
+2. Connect from another terminal and type a message
+
+    ```bash
+    netcat localhost 8080
+    ```
+
+3. Type `hello` and press enter, the server should reply with `You said: hello`. Leave with `Ctrl+C`.
+
+4. Check the GoNetSim terminal, it should show the message was logged and captured.
+</Steps>
+
+For faster iteration, the `script` command runs a handler over stdin/stdout with no port at all:
+
+```bash
+echo "hello" | gonetsim script greet.lua
+```
+
+This is the fastest way to try changes.
+
+## Next Steps
+
+- Read the full [Lua API](/scripting/api) to see everything handlers can do
+- Browse ready-made [examples](/scripting/examples) for common protocols like IRC & FTP
+- See the [listeners reference](/reference/listeners) for configuration options like TLS & UDP

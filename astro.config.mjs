@@ -27,6 +27,14 @@ export default defineConfig({
 					],
 				},
 				{
+					label: 'Scripting',
+					items: [
+						{ label: 'Getting Started', slug: 'scripting/getting-started' },
+						{ label: 'Lua API', slug: 'scripting/api' },
+						{ label: 'Examples', slug: 'scripting/examples' },
+					],
+				},
+				{
 					label: 'Reference',
 					autogenerate: { directory: 'reference' },
 				},

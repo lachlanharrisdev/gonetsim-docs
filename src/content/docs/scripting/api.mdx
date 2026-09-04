@@ -1,0 +1,144 @@
+---
+title: Lua API
+description: Everything available to Lua handler scripts
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+This page covers everything a Lua handler can use. The API is intentionally small, with one object for the connection, one for logging, one for capturing data.
+
+## Entrypoints
+
+A script defines one or both of these global functions:
+
+| Function | Protocol | Description |
+| --- | --- | --- |
+| `handle(conn)` | TCP | Called once per connection, with the connection object |
+| `handle_packet(data)` | UDP | Called once per datagram; return a string to reply, `nil` to stay silent |
+
+```lua
+function handle(conn)
+    -- serve a TCP connection
+end
+
+function handle_packet(data)
+    -- process a UDP datagram
+    if data == "ping" then
+        return "pong"
+    end
+    return nil
+end
+```
+
+TCP scripts must define `handle`, UDP scripts must define `handle_packet`. A script that defines both works on either.
+
+## Connection
+
+The `conn` object is passed to `handle` and is the only way to talk to the client.
+
+| Method | Returns | Description |
+| --- | --- | --- |
+| `conn:read(n)` | string / `nil` | Read up to `n` bytes, as soon as any data is available |
+| `conn:read_line()` | string / `nil` | Read until the next newline (the `\n` is included in the result) |
+| `conn:read_until(delim)` | string / `nil` | Read until the delimiter appears (the delimiter is included in the result) |
+| `conn:write(data)` | | Send a string to the client |
+| `conn:sleep(ms)` | | Pause the script for `ms` milliseconds |
+| `conn:sni()` | string / `nil` | The domain the client asked for during a TLS handshake, or `nil` on plain connections |
+| `conn:close()` | | Close the connection |
+| `conn:remote()` | string | The client's address, e.g. `192.168.1.10:53214` |
+
+Reads return `nil` when the client closes the connection cleanly. This is the normal way to end a session, so the common pattern is:
+
+```lua
+while true do
+    local line = conn:read_line()
+    if not line then break end
+    conn:write("received: " .. line)
+end
+```
+
+Failed reads (timeouts, network errors) raise a Lua error, which ends the script for that connection and is logged by GoNetSim. You rarely need to handle these yourself; letting the error end the session is usually what you want.
+
+<Aside>Reads are capped at 1 MiB each, so a client sending an endless stream without a newline can't exhaust memory.</Aside>
+
+`read_until` is handy for header-style protocols, for example, collecting everything up to a blank line in an HTTP request:
+
+```lua
+local headers = conn:read_until("\r\n\r\n")
+```
+
+### Sleeping
+
+Malware frequently alters its behaviour based on latency or timeout limits, and `conn:sleep(ms)` lets a handler pause before replying:
+
+```lua
+conn:write("banner\r\n")
+conn:sleep(1500) -- act like a slow link
+conn:read_line()
+```
+
+Sleeps count as script activity, not client inactivity: a read after a long sleep still gets the full idle timeout. A single sleep is capped at one hour, and sleeps end early (with an error) when GoNetSim shuts down.
+
+### TLS SNI
+
+When a TCP listener runs behind TLS, `conn:sni()` returns the domain name the client asked for during the handshake. This lets one generic script behave differently per domain:
+
+```lua
+local domain = conn:sni()
+if domain == "update.example.com" then
+    conn:write("...fake update response...")
+else
+    conn:write("...generic response...")
+end
+```
+
+`sni()` returns `nil` for plain (non-TLS) connections, and performs the TLS handshake itself if the script calls it before any reads.
+
+## Binary Packing
+
+Binary protocols are common in C2 traffic, and scripts get the standard `string.pack` & `string.unpack` functions for them: parsing integers, short ints and raw byte structures without tedious bitwise arithmetic.
+
+```lua
+local packet = string.pack(">I4", 1024)   -- big-endian unsigned 32-bit int
+local n, pos = string.unpack("<i2", data) -- little-endian signed 16-bit int
+```
+
+Supported formats cover the practical subset of the [Lua 5.3 spec](https://www.lua.org/manual/5.3/manual.html#6.4.2): integers (`b`, `B`, `h`, `H`, `i`/`iN`, `l`), floats (`f`, `d`), strings (`s`/`sN`, `z`, `cN`), `x` padding, and `<`/`>` endianness. See the [examples](/scripting/examples) for a length-prefixed binary handler.
+
+## Logging
+
+The `log` object writes to GoNetSim's structured logs, tagged with the listener's name:
+
+```lua
+log:info("client connected from " .. conn:remote())
+log:warn("unusual payload received")
+log:error("something went wrong")
+```
+
+Lua's built-in `print` also routes through the logger, so quick debugging works as expected.
+
+## Capture
+
+The `capture` object saves what the client sends to the artifacts directory (`artifacts/<listener>/` by default). One file is written per connection:
+
+```lua
+capture:write("irc", line)   -- saved under a "=== irc ===" section header
+capture:write("", raw_bytes) -- written as-is, with no header
+```
+
+Named sections make artifacts easier to read later, for example, tagging each captured line with the command it belongs to. Capture is enabled by default and can be turned off per listener or with `--no-capture`.
+
+## Sandbox
+
+Scripts run with a deliberately minimal standard library: the base, `string`, `table` and `math` libraries are available, and nothing else. There is no `io`, no `os`, and no `require`, so scripts cannot read files, run programs or communicate outside of their connection.
+
+Everything a script needs to persist goes through `capture`, which lands in a predictable directory you control.
+
+## Timeouts
+
+Connections have an idle timeout (30 seconds by default, configurable per listener with `read_timeout` or per run with `--timeout`). If a client stops sending data for that long, the connection is closed. This does not need to be tracked in scripts
+
+## Further Reading
+
+- See the [examples](/scripting/examples) for complete, runnable handlers
+- See the [listeners reference](/reference/listeners) for configuration & runtime flags

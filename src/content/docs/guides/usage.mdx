@@ -45,7 +45,7 @@ Let's try disabling the DNS service:
 <Steps>
 1. Open the config file at `~/.config/gonetsim/config.toml` (or `%APPDATA%\gonetsim\config.toml` on Windows) in a text editor.
 
-2. Find the `[services.dns]` section and set `enabled = false`.
+2. Find the `[dns]` section and set `enabled = false`.
 
     ```diff
     ...
@@ -80,12 +80,86 @@ Let's try disabling the DNS service:
 
 If you'd like to learn more about configuration, please see the [configuration guide](/guides/configuration).
 
+## Choosing What Runs
+
+Running `gonetsim` on its own starts every service enabled in your config. To start only some of them, name them as targets with `run`:
+
+<Tabs>
+	<TabItem label="Linux / MacOS">
+	```bash
+	gonetsim run http
+	```
+	</TabItem>
+	<TabItem label="Windows">
+	```bash
+	gonetsim.exe run http
+	```
+	</TabItem>
+</Tabs>
+
+You can name several targets in one go, mixing services & custom listeners freely:
+
+```bash
+gonetsim run http dns irc
+```
+
+Anything you name is started even when its config says `enabled = false`.
+
+<Aside>Targets can also be passed straight to `gonetsim` without the `run` keyword, i.e. `gonetsim http` does the same thing as `gonetsim run http`.</Aside>
+
+### Inline Listeners
+
+Listeners can also be started straight from the command line with no configuration at all, using `handler@address` targets:
+
+```bash
+gonetsim run echo@:7777       # echo everything back, over TCP
+gonetsim run sink@:9999/udp   # silently consume UDP traffic
+gonetsim run irc.lua@:6667    # serve a local Lua handler
+```
+
+These are perfect for quickly testing a handler, or standing in for a service your sample expects to find. See the [listeners reference](/reference/listeners) for the full details.
+
+## Flags
+
+Most sessions need small adjustments to override the config, so instead of editing your config, pass the changes as flags:
+
+| Flag | Description |
+| --- | --- |
+| `-s`, `--set key=value` | Override any config option for this run (repeatable) |
+| `--listen <address>` | Use a different listen address (with a single target) |
+| `--timeout <duration>` | Idle connection timeout (default `30s`) |
+| `--tls` | Wrap an inline TCP listener in TLS (self-signed) |
+| `--no-capture` | Don't save captured traffic for this run |
+| `--artifacts <dir>` | Write captures somewhere else (default `./artifacts`) |
+
+For example, to serve HTTP from a folder on a custom port & status code:
+
+```bash
+gonetsim run http --listen :8080 -s http.mode=real -s http.root_dir=./sample-site
+```
+
+Or to try a Lua handler with TLS, without leaving capture files behind:
+
+```bash
+gonetsim run c2.lua@:8443 --tls --no-capture
+```
+
+## Testing Handlers
+
+Custom Lua handlers can be developed & tested without opening a single port. The `script` command pipes traffic through a handler over stdin/stdout:
+
+```bash
+echo "NICK test" | gonetsim script handlers/irc.lua
+```
+
+For a full walkthrough of writing your own handlers, see the [scripting section](/scripting/getting-started).
+
 ## Resources
 
 There are plenty of official resources to help you get started with GoNetSim:
 
 <Card title="Help" icon="help">
-    The built-in `gonetsim help` command shows you all available commands, flags and options for GoNetSim. You can also learn more about specific sub-commands by running `gonetsim help <sub-command>` (e.g. `gonetsim help version`)
+    The built-in `gonetsim help` command shows you all available commands, flags and options for GoNetSim. You can also learn more about specific sub-commands by running `gonetsim help <sub-command>` (e.g. `gonetsim help run`)
 
     <Tabs>
         <TabItem label="Linux">

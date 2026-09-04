@@ -35,17 +35,17 @@ To see instructions on how to configure these options, see the [configuration gu
 
 ## Command
 
-The HTTP service can be run individually using the `http` subcommand:
+The HTTP service can be run on its own by passing it as a target to `run`:
 
 <Tabs>
 <TabItem label="Linux / MacOS">
 ```bash
-gonetsim http
+gonetsim run http
 ```
 </TabItem>
 <TabItem label="Windows">
 ```bash
-gonetsim.exe http
+gonetsim.exe run http
 ```
 </TabItem>
 </Tabs>
@@ -60,7 +60,7 @@ You can test the HTTP service using `curl`.
 1. Start the HTTP service
 
     ```bash
-    gonetsim http
+    gonetsim run http
     ```
 2. In a separate terminal, make a request to the service using `curl`
 

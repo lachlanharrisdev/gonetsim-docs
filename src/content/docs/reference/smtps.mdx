@@ -14,7 +14,7 @@ The SMTPS service simulates an ESMTP (Extended Simple Mail Transfer Protocol) se
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
 | `enabled` | bool | `true` | Whether the SMTPS service is enabled |
-| `addr` | string | `:465` | The address and port to listen on (e.g. `:465`) |
+| `listen` | string | `:465` | The address and port to listen on (e.g. `:465`) |
 | `domain` | string | `localhost` | The domain name to use in the server's responses |
 | `write_timeout` | int | `10` | The timeout for writing data to the client, in seconds |
 | `read_timeout` | int | `10` | The timeout for reading data from the client, in seconds |
@@ -25,19 +25,21 @@ The SMTPS service simulates an ESMTP (Extended Simple Mail Transfer Protocol) se
 
 To see instructions on how to configure these options, see the [configuration guide](/guides/configuration).
 
+<Aside type="note">Older versions of GoNetSim used the option `addr` for the listen address. It still works, but `listen` is preferred & matches the other services.</Aside>
+
 ## Command
 
-The SMTPS service can be run individually using the `smtps` subcommand:
+The SMTPS service can be run on its own by passing it as a target to `run`:
 
 <Tabs>
 <TabItem label="Linux / MacOS">
 ```bash
-gonetsim smtps
+gonetsim run smtps
 ```
 </TabItem>
 <TabItem label="Windows">
 ```bash
-gonetsim.exe smtps
+gonetsim.exe run smtps
 ```
 </TabItem>
 </Tabs>
@@ -53,7 +55,7 @@ You can test the SMTP service using `openssl`.
 1. Start the SMTPS service
 
     ```bash
-    gonetsim smtps
+    gonetsim run smtps
     ```
 
 2. In another terminal session, connect to the SMTP service using `openssl`
