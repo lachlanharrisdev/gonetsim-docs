@@ -7,14 +7,14 @@ import { Aside } from '@astrojs/starlight/components';
 import { Steps } from '@astrojs/starlight/components';
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 
-GoNetSim can run HTTPS and SMTPS using either:
+GoNetSim can run HTTPS (and any TLS-wrapped custom listener) using either:
 
-- A user-provided certificate/key (configured in `https.cert`/`https.key` and `smtps.cert`/`smtps.key`), or
+- A user-provided certificate/key (configured in `https.cert`/`https.key`), or
 - An auto-generated certificate/key.
 
 ## Auto-generated TLS
 
-When `https.cert`/`https.key` (or `smtps.cert`/`smtps.key`) are not set, GoNetSim will use a persisted, auto-generated keypair stored next to the active `config.toml`.
+When `https.cert`/`https.key` are not set, GoNetSim will use a persisted, auto-generated keypair stored next to the active `config.toml`.
 
 The following files are created in the same directory as `config.toml` if they don't already exist:
 
@@ -91,4 +91,4 @@ gonetsim tls --verify-only
 
 - See the basic [configuration guide](/guides/configuration) for a walkthrough on configuration
 - See the [HTTPS reference](/docs/reference/https) for HTTPS-specific TLS options
-- See the [SMTPS reference](/docs/reference/smtps) for SMTPS-specific TLS options
+- See the [listeners reference](/reference/listeners) for TLS options on custom listeners

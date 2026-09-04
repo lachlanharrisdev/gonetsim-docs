@@ -7,7 +7,7 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import { Steps } from '@astrojs/starlight/components';
 import { Aside } from '@astrojs/starlight/components';
 
-Custom listeners let GoNetSim simulate almost any TCP or UDP protocol, using small scripts written in [Lua](https://www.lua.org). They fill the gap left by the built-in services: when malware speaks a protocol that DNS, HTTP or SMTP can't cover, you can write a handler for it in a few lines.
+Custom listeners let GoNetSim simulate almost any TCP or UDP protocol, using small scripts written in [Lua](https://www.lua.org). When malware speaks a protocol that DNS or HTTP can't cover, such as SMTP, IRC or a bespoke C2 channel, you can write a handler for it in a few lines.
 
 The idea is simple. When a client connects, GoNetSim hands the connection to your script. Your script reads what the client sends, decides what to reply, and GoNetSim takes care of logging, timeouts, and saving what the client sent.
 

@@ -8,6 +8,20 @@ import { LinkButton } from '@astrojs/starlight/components';
 
 Each example below is a complete handler. You can save it as a `.lua` file and run it with `gonetsim run <file>.lua@<port>`, or wire it into your config as a [custom listener](/reference/listeners).
 
+## SMTP
+
+This is the best demonstration of what a script can cover in GoNetSim. It accepts mail and captures envelope addresses, the message body and decoded AUTH credentials.
+
+The full handler can be found at [`examples/handlers/smtp.lua`](https://github.com/lachlanharrisdev/gonetsim/tree/main/examples/handlers) in the repository.
+
+The complete version adds what makes it production-worthy as a sink:
+
+- AUTH via `PLAIN` & `LOGIN` with a ~20-line base64 decoder written in Lua, so captured credentials are decoded before being saved to the artifacts directory
+- Message lines that start with a dot arrive doubled; the handler strips them so captured messages read exactly as sent
+- `conn:sleep` before responses, for malware that treats instant answers as suspicious
+
+<Aside type="caution">The handler advertises a minimal capability set and does not support STARTTLS; use `tls = true` on the listener for the implicit-TLS (465) instead. Strict SMTP client libraries may reject it, but usually malware that just wants to send mail won't care.</Aside>
+
 ## Echo
 
 Sends everything back to the client.
@@ -129,7 +143,7 @@ Run it with `gonetsim run messages.lua@:9000` and probe it:
 printf '\x00\x05hello' | netcat localhost 9000   # replies with \x00\x05hello
 ```
 
-`string.pack`/`string.unpack` support signed & unsigned integers from 1 to 8 bytes, floats, zero-terminated and length-prefixed strings — see the [Lua API](/scripting/api) for the full format list.
+`string.pack`/`string.unpack` support signed & unsigned integers from 1 to 8 bytes, floats, zero-terminated and length-prefixed strings. See the [Lua API](/scripting/api) for the full format list.
 
 ## More Examples
 
