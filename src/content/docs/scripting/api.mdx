@@ -14,15 +14,16 @@ A script defines one or both of these global functions:
 | Function | Protocol | Description |
 | --- | --- | --- |
 | `handle(conn)` | TCP | Called once per connection, with the connection object |
-| `handle_packet(data)` | UDP | Called once per datagram; return a string to reply, `nil` to stay silent |
+| `handle_packet(data, peer)` | UDP | Called once per datagram; return a string to reply, `nil` to stay silent. `peer` is a table with the source address: `ip`, `port`, and `addr` (the `ip:port` string) |
 
 ```lua
 function handle(conn)
     -- serve a TCP connection
 end
 
-function handle_packet(data)
+function handle_packet(data, peer)
     -- process a UDP datagram
+    log:info("datagram from " .. peer.addr)
     if data == "ping" then
         return "pong"
     end
@@ -43,10 +44,15 @@ The `conn` object is passed to `handle` and is the only way to talk to the clien
 | `conn:read_until(delim)` | string / `nil` | Read until the delimiter appears (the delimiter is included in the result) |
 | `conn:write(data)` | | Send a string to the client |
 | `conn:sleep(ms)` | | Pause the script for `ms` milliseconds |
+| `conn:remote()` | string | The client's address, e.g. `192.168.1.10:53214` |
+| `conn:local()` | string | The server's address for this connection, e.g. `10.0.0.5:4444` |
+| `conn:remote_ip()` | string / `nil` | The client's IP, e.g. `192.168.1.10` |
+| `conn:remote_port()` | number / `nil` | The client's source port, e.g. `53214` |
+| `conn:local_port()` | number / `nil` | The listener's port for this connection |
 | `conn:sni()` | string / `nil` | The domain the client asked for during a TLS handshake, or `nil` on plain connections |
+| `conn:tls()` | table / `nil` | TLS metadata in a table, formatted as `{ version = "TLS 1.3", cipher = "TLS_AES_128_GCM_SHA256" }` |
 | `conn:get`/`set`/`has`/`delete` `(key[, value])` | *see [State](#state)* | Per-connection state |
 | `conn:close()` | | Close the connection |
-| `conn:remote()` | string | The client's address, e.g. `192.168.1.10:53214` |
 
 Reads return `nil` when the client closes the connection cleanly. This is the normal way to end a session, so the common pattern is:
 
@@ -93,7 +99,7 @@ else
 end
 ```
 
-`sni()` returns `nil` for plain (non-TLS) connections, and performs the TLS handshake itself if the script calls it before any reads.
+`sni()` returns `nil` for plain (non-TLS) connections, and performs the TLS handshake itself if the script calls it before any reads. `conn:tls()` works the same way, returning `nil` on plain connections and a `{ version, cipher }` table otherwise.
 
 ## Binary Packing
 
