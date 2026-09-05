@@ -44,7 +44,7 @@ The `conn` object is passed to `handle` and is the only way to talk to the clien
 | `conn:write(data)` | | Send a string to the client |
 | `conn:sleep(ms)` | | Pause the script for `ms` milliseconds |
 | `conn:sni()` | string / `nil` | The domain the client asked for during a TLS handshake, or `nil` on plain connections |
-| `conn:get/set/has/delete(key[, value])` | see [State](#state) | Per-connection state |
+| `conn:get`/`set`/`has`/`delete` `(key[, value])` | *see [State](#state)* | Per-connection state |
 | `conn:close()` | | Close the connection |
 | `conn:remote()` | string | The client's address, e.g. `192.168.1.10:53214` |
 
@@ -119,18 +119,17 @@ Scripts can remember values across connections through three state scopes:
 Each scope exposes the same four functions:
 
 ```lua
-handler:set("count", "42")   -- returns true, or false + a reason
+handler:set("count", "42")         -- returns true, or false + a reason
 local count = handler:get("count") -- nil when the key doesn't exist
 local exists = handler:has("count")
-handler:delete("count")      -- silently succeeds either way
+handler:delete("count")            -- silently succeeds either way
 ```
 
-State maps strings to binary-safe strings — no tables, no serialization. It's deliberately bounded: keys are capped at 4 KiB, values at 1 MiB, and everything (all scopes, all listeners combined) draws from one total budget, `64MiB` by default, configurable with `state.total_limit`. When a `set()` would push total state past the budget it fails gracefully — `set` returns `false` plus a reason instead of throwing, so scripts can react or carry on.
+The state maps strings to binary-safe strings only. 
 
-This is a resource guarantee rather than a sandbox restriction: state is bounded so a handler cannot consume unbounded simulator memory.
+For (memory) safety and security, keys are capped at `4 KiB`, values at `1 MiB`, and everything is limited under one total budget, `64MiB` by default, configurable with `state.total_limit`. When a `set()` would push total state past the budget it fails gracefully by returning `false` plus a reason.
 
 ```lua
--- one greeting per client, remembered across connections
 local seen = handler:get(conn:remote())
 if not seen then
     handler:set(conn:remote(), "1")
