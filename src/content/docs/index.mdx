@@ -1,9 +1,9 @@
 ---
 title: GoNetSim
-description: The official documentation for GoNetSim, the Go network simulator.
+description: A programmable network simulator for malware analysis; simulate any network protocol with small, sandboxed, shareable Lua handlers.
 template: splash # Remove or comment out this line to display the site sidebar on this page.
 hero:
-  tagline: The official documentation for GoNetSim, the Go network simulator.
+  tagline: A programmable network simulator for malware analysis; simulate any network protocol with small, sandboxed, shareable Lua handlers.
   image:
     file: ../../assets/logo_transparent.png
   actions:
@@ -22,18 +22,18 @@ import { LinkButton } from '@astrojs/starlight/components';
 ## Supported services
 
 <CardGrid stagger>
-	<Card title="DNS" icon="dns" link="/reference/dns">
+	<Card title="DNS" icon="server" link="/reference/dns">
 		DNS server supporting A/AAAA records. Can be used in combination with the HTTP & HTTPS services to simulate C2 domains.
 
 		<LinkButton href="/reference/dns" variant="secondary" icon="right-arrow">Reference</LinkButton>
 	</Card>
 
-	<Card title="HTTP" icon="http" link="/reference/http">
+	<Card title="HTTP" icon="window" link="/reference/http">
 		HTTP server with two modes: "Fake" mode returns a realistic response for any request & file extension, while "Real" mode serves static files from a specified directory.
 
 		<LinkButton href="/reference/http" variant="secondary" icon="right-arrow">Reference</LinkButton>
 	</Card>
-	<Card title="HTTPS" icon="https" link="/reference/https">
+	<Card title="HTTPS" icon="padlock" link="/reference/https">
 		HTTPS server extending the functionality of the HTTP service by adding TLS support. Possesses the same two modes of operation as the HTTP service.
 
 		<LinkButton href="/reference/https" variant="secondary" icon="right-arrow">Reference</LinkButton>
@@ -42,6 +42,11 @@ import { LinkButton } from '@astrojs/starlight/components';
 		Generic TCP/UDP listeners extend GoNetSim to almost any protocol. Use the built-in echo & sink handlers, or write your own in sandboxed Lua
 
 		<LinkButton href="/scripting/getting-started" variant="secondary" icon="right-arrow">Scripting guide</LinkButton>
+	</Card>
+	<Card title="Lua Scripting" icon="document" link="/scripting/api">
+		See the full Lua API specification for scripting
+
+		<LinkButton href="/scripting/api" variant="secondary" icon="right-arrow">API Reference</LinkButton>
 	</Card>
 </CardGrid>
 

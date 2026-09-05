@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import starlightThemeBlack from 'starlight-theme-black'
+import starlightLlmsTxt from 'starlight-llms-txt'
 
 // https://astro.build/config
 export default defineConfig({
@@ -11,7 +12,7 @@ export default defineConfig({
 		starlight({
 			title: 'GoNetSim',
 			favicon: '/favicon.png',
-			description: 'An unofficial, spiritual successor to INetSim, a suite of tools for simulating common internet services for malware analysis and testing.',
+			description: 'A programmable network simulator for malware analysis; simulate any network protocol with small, sandboxed, shareable Lua handlers.',
 			logo: {
 				src: './src/assets/logo_transparent.png',
 			},
@@ -45,7 +46,7 @@ export default defineConfig({
 			},
 			customCss: [
 				'./src/styles/custom.css',
-			], 
+			],
 			/*
 			head: [
 				{
@@ -59,28 +60,57 @@ export default defineConfig({
 			],*/
 
 
-			plugins: [
+            plugins: [
+                starlightLlmsTxt({
+                    optionalLinks: [
+                        {
+                            label: 'Repository',
+                            description: 'link to the source repository on GitHUb',
+                            url: 'https://github.com/lachlanharrisdev/gonetsim'
+                        },
+                        {
+                            label: 'Readme',
+                            description: 'link to the raw readme from the source repository on GitHub',
+                            url: 'https://raw.githubusercontent.com/lachlanharrisdev/gonetsim/main/README.md'
+                        }
+                    ],
+                    customSets: [
+                        {
+                            label: 'Guides',
+                            description: 'useful references for setup, installation and basic syntax',
+                            paths: ['guides/**']
+                        },
+                        {
+                            label: 'Lua',
+                            description: 'all documentation regarding creating custom scripts and listeners, including examples',
+                            paths: ['scripting/**']
+                        },
+                        {
+                            label: 'Reference',
+                            description: 'detailed documentation for built-in services (HTTP/S, DNS), how listeners run and extra tools (such as TLS)',
+                            paths: ['scripting/**']
+                        },
+                    ],
+                }),
 				starlightThemeBlack({
-				navLinks: [
-					{
-						label: 'Docs',
-						link: '/guides/installation/',
-					},
-					{
-						label: 'About',
-						link: '/about/',
-					},
-					{
-						label: 'Downloads',
-						link: 'https://github.com/lachlanharrisdev/gonetsim/releases',
-					},
-					{
-						label: 'Contact',
-						link: '/contact/',
-					}
-				],
-				footerText: //optional
-					'Copyright (c) 2026 Lachlan Harris. All Rights Reserved.'
+    				navLinks: [
+    					{
+    						label: 'Docs',
+    						link: '/guides/installation/',
+    					},
+    					{
+    						label: 'About',
+    						link: '/about/',
+    					},
+    					{
+    						label: 'Downloads',
+    						link: 'https://github.com/lachlanharrisdev/gonetsim/releases',
+    					},
+    					{
+    						label: 'Contact',
+    						link: '/contact/',
+    					}
+    				],
 				})
 			],
 		}),
