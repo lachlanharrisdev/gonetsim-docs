@@ -19,6 +19,7 @@ The complete version adds what makes it production-worthy as a sink:
 - AUTH via `PLAIN` & `LOGIN` with a ~20-line base64 decoder written in Lua, so captured credentials are decoded before being saved to the artifacts directory
 - Message lines that start with a dot arrive doubled; the handler strips them so captured messages read exactly as sent
 - `conn:sleep` before responses, for malware that treats instant answers as suspicious
+- Handler state that spans connections: a mail counter & repeat-sender memory via `handler:get/set/has`
 
 <Aside type="caution">The handler advertises a minimal capability set and does not support STARTTLS; use `tls = true` on the listener for the implicit-TLS (465) instead. Strict SMTP client libraries may reject it, but usually malware that just wants to send mail won't care.</Aside>
 
