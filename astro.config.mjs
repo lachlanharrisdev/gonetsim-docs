@@ -62,6 +62,7 @@ export default defineConfig({
 
             plugins: [
                 starlightLlmsTxt({
+                    exclude: ['404'],
                     optionalLinks: [
                         {
                             label: 'Repository',
